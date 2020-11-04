@@ -1,20 +1,11 @@
-# MC class constructor ----------------------------------------------------------------
+# markov_chain class constructor ----------------------------------------------------------------
 
-#' Basic constructor for the mc class
-#'
-#' @param name The name of the chain
-#' @param number_of_states initial number of states (labeled "1", "2", etc.)
-#'
-#' @return an mc object
-#'
-#' @export
-#'
-#' @examples
-#' m = new_mc("Chain's name", number_of_states = 3)
-#' print(m)
-new_mc <- function(name = "No name",
-                   number_of_states = NA) {
-  value = list(
+markov_chain <- function(x, ...) {
+  switch(typeof(x))
+}
+
+markov_chain_empty <- function(name = "Unnamed") {
+  value <- list(
     name = name,
     edges = tibble::tibble(
       from = integer(0),
@@ -33,36 +24,41 @@ new_mc <- function(name = "No name",
       color = character(0),
       shape = character(0)
     ),
-    layout = matrix(ncol=2, nrow=0),
+    layout = matrix(ncol = 2, nrow = 0),
     graphics_parameters = list()
   )
-  class(value) <- "mc"
-  if (!is.na(number_of_states) & number_of_states >= 1)
-  {
-    for (i in 1:number_of_states)
-      value = add_state(value)
-  }
+  class(value) <- "markov_chain"
+
   return(value)
 }
 
-#' An mc constructor from the transition matrix
-#'
-#' @param P a square matrix
-#'
-#' @return an mc object
-#' @export
-#'
-#' @examples
-#' P = matrix( c(0.2, 0.8, 0.3, 0.7), byrow = T, ncol = 2)
-#' m = new_mc_from_matrix(P)
-#' print(m)
+markov_chain_integer <- function(number_of_states, ...) {
+  m <- markov_chain_empty(...)
+  if (!is.na(number_of_states) & number_of_states >= 1) {
+    for (i in 1:number_of_states) {
+      m = m %>% add_state()
+    }
+  } else {
+    stop("number_of_states need to be a positive integer")
+  }
+  return(m)
+}
 
-new_mc_from_matrix <- function(P, name = "From matrix") {
+markov_chain_vector <- function(x, ...){
+  x = as.character(x)
+  m <- markov_chain_empty(...)
+  for (i in 1:length(x)) {
+    m = m %>% add_state(label=x[i])
+  }
+  return(m)
+}
+
+markov_chain_matrix <- function(P, ...) {
   if (length(dim(P))!=2) stop("P needs to be a matrix")
   if (dim(P)[1] != dim(P)[2]) stop("P is not square")
   n = dim(P)[1]
 
-  m=new_mc(name = name, number_of_states = n)
+  m=markov_chain_integer(number_of_states = n, ...)
   for (i in 1:n)
     for (j in 1:n)
       if (P[i,j] != 0)
@@ -71,42 +67,23 @@ new_mc_from_matrix <- function(P, name = "From matrix") {
   return(m)
 }
 
-#' Constructs an mc object from a data frame
-#'
-#' @param df a data frame, with columns "from" and "to, and maybe others (prob, curve, etc.)
-#' @param name string, name of the mc
-#'
-#' @return
-#' @export
-#'
-#' @examples
-#' df = data_frame(
-#'   from = c("b","b","a","c"),
-#'   to = c("a","b","c","c"),
-#'   prob = c(0.2, 0.8, 1, 1)
-#' )
-#' m = new_mc_from_data_frame(df, name="Three")
-#' print(transition_matrix(m))
-new_mc_from_data_frame = function(df, name = "From data frame")
+markov_chain_data_frame = function(df, ...)
 {
   if ( !("to" %in% names(df)) )
     stop("\"to\" needs to be a column label in the input data_frame")
 
   if (!("from" %in% names(df)))
     stop("\"from\" needs to be a column label in the input data_frame")
+
   df$to = as.character(df$to)
   df$from = as.character(df$from)
 
-  m = new_mc(name)
-  m = m %>%
-    add_states(sort(unique(c(df$to, df$from))))
+  states = sort(unique(c(df$to, df$from)))
+  m = markov_chain_vector(states)
   for (i in 1:nrow(df)) {
-    print(df[i,])
     m = do.call(add_edge_by_labels, c(list(m), df[i,]))
   }
-
   return(m)
-
 }
 
 
@@ -114,28 +91,28 @@ new_mc_from_data_frame = function(df, name = "From data frame")
 
 #' Returns the number of states
 #'
-#' @param m mc object
+#' @param m markov_chain object
 #'
 #' @return integer
 #' @export
 #'
 #' @examples
-#' m = new_mc("Chain with 3 states", number_of_states = 3)
+#' m = new_markov_chain("Chain with 3 states", number_of_states = 3)
 #' print(length(m))
-length.mc = function(x) {
+length.markov_chain = function(x) {
   m = x # x is for consistency with length
   nrow(m$states)
 }
 
 #' Return the number of edges
 #'
-#' @param m mc object
+#' @param m markov_chain object
 #'
 #' @return integer
 #' @export
 #'
 #' @examples
-#' m = new_mc("Chain with 3 states", number_of_states = 3)
+#' m = new_markov_chain("Chain with 3 states", number_of_states = 3)
 #' m = add_edge_by_labels("1","2")
 #' m = add_edge_by_labels("1","3")
 #' print(nedges(m))
@@ -150,14 +127,14 @@ check_index = function(m, index) {
 
 #' Index of a state given its label
 #'
-#' @param m mc
+#' @param m markov_chain
 #' @param label
 #'
 #' @return integer or 0 if no match
 #' @export
 #'
 #' @examples
-#' m = new_mc("Empty chain")
+#' m = new_markov_chain("Empty chain")
 #' m = add_states(m, c("a","b"))
 #' print(label_to_index(m,"b"))
 #' print(label_to_index(m,"c"))
@@ -171,14 +148,14 @@ label_to_index <- function(m, label) {
 
 #' Label of a state given index
 #'
-#' @param m mc
+#' @param m markov_chain
 #' @param index
 #'
 #' @return string label
 #' @export
 #'
 #' @examples
-#' m = new_mc()
+#' m = new_markov_chain()
 #' m = add_states(m,c("a","b","c"))
 #' print(index_to_label(m, 2))
 index_to_label <- function(m, index) {
@@ -197,7 +174,7 @@ index_to_label <- function(m, index) {
 #' @export
 #'
 #' @examples
-#' m = random_mc(3)
+#' m = random_markov_chain(3)
 #' j = index_pair_to_edge(m,1,2)
 #' m$edges[j,]
 index_pair_to_edge = function(m, from, to) {
@@ -235,19 +212,19 @@ ei = index_pair_to_edge
 # New states and edges ----------------------------------------------------
 
 
-#' Adds a state to a mc
+#' Adds a state to a markov_chain
 #'
-#' @param m mc
+#' @param m markov_chain
 #' @param label state's label
 #' @param x x-coordinate (for plotting)
 #' @param y x-coordinate (for plotting)
 #' @param color (for plotting)
 #'
-#' @return mc object
+#' @return markov_chain object
 #' @export
 #'
 #' @examples
-#' m = new_mc()
+#' m = new_markov_chain()
 #' m = add_state(m,"a", x=1, y=2, color = "reddish")
 #' print(m)
 add_state <- function(m,
@@ -280,7 +257,7 @@ add_state <- function(m,
 
 #' Adds a vector of states to a chain
 #'
-#' @param m mc
+#' @param m markov_chain
 #' @param states a vector of state labels
 #' @param ...
 #'
@@ -288,7 +265,7 @@ add_state <- function(m,
 #' @export
 #'
 #' @examples
-#' m = new_mc()
+#' m = new_markov_chain()
 #' m = add_states(m, c("a","b","c"), color = "yellow")
 #' print(m)
 add_states = function(m, states, ...) {
@@ -303,7 +280,7 @@ add_states = function(m, states, ...) {
 
 #' Add an edge to the chain
 #'
-#' @param m mc
+#' @param m markov_chain
 #' @param from string label
 #' @param to string label
 #' @param prob numeric
@@ -312,11 +289,11 @@ add_states = function(m, states, ...) {
 #' @param curve numeric
 #' @param loop_angle numeric
 #'
-#' @return mc
+#' @return markov_chain
 #' @export
 #'
 #' @examples
-#' m = new_mc(number_of_states = 3)
+#' m = new_markov_chain(number_of_states = 3)
 #' m = add_edge_by_indices(m, 1, 2, prob=0.2)
 #' print(m)
 add_edge_by_indices <-
@@ -348,16 +325,16 @@ add_edge_by_indices <-
 
 #' add edge, but from and to are string labels
 #'
-#' @param m mc
+#' @param m markov_chain
 #' @param from label
 #' @param to label
 #' @param ...
 #'
-#' @return mc
+#' @return markov_chain
 #' @export
 #'
 #' @examples
-#' m = new_mc()
+#' m = new_markov_chain()
 #' m = add_states(m, c("a", "b", "c"))
 #' m = add_edge_by_labels(m, "b", "c", prob=0.4)
 #' print(m)
@@ -369,15 +346,15 @@ add_edge_by_labels <- function(m, from, to, ...) {
 
 #' Sets a property of a state by its index
 #'
-#' @param m mc
+#' @param m markov_chain
 #' @param index integer
 #' @param ... named properties to be set
 #'
-#' @return mc
+#' @return markov_chain
 #' @export
 #'
 #' @examples
-#' m = new_mc("Chain",2)
+#' m = new_markov_chain("Chain",2)
 #' m = set_state_properties_by_index(m,1, color="Aquamarine")
 #' print(m$states)
 set_state_properties_by_index = function(m, index, ...) {
@@ -391,15 +368,15 @@ set_state_properties_by_index = function(m, index, ...) {
 
 #' Sets a property of a state by its label
 #'
-#' @param m mc
+#' @param m markov_chain
 #' @param label string
 #' @param ... named properties to be set
 #'
-#' @return mc
+#' @return markov_chain
 #' @export
 #'
 #' @examples
-#' m = new_mc("Chain")
+#' m = new_markov_chain("Chain")
 #' m = add_states(m,c("a","b"))
 #' m = set_state_properties_by_index(m,"a", color="Aquamarine")
 #' print(m$states)
@@ -414,11 +391,11 @@ set_state_properties_by_label = function(m, label, ...) {
 #' @param to index
 #' @param ... named properties to be set
 #'
-#' @return mc
+#' @return markov_chain
 #' @export
 #'
 #' @examples
-#' m = new_mc("Chain",2)
+#' m = new_markov_chain("Chain",2)
 #' m = add_edge_by_indices(m,1,2,prob=0.2)
 #' m = set_edge_properties_by_indices(m,1,2, prob=0.3)
 #' print(m$edges)
@@ -437,11 +414,11 @@ set_edge_properties_by_indices = function(m, from, to, ...) {
 #' @param to label
 #' @param ... named properties to be set
 #'
-#' @return mc
+#' @return markov_chain
 #' @export
 #'
 #' @examples
-#' m = new_mc("Chain")
+#' m = new_markov_chain("Chain")
 #' m = add_states(m, c("b", "a"))
 #' m = add_edge_by_labels(m, "a", "b", prob=0.2)
 #' m = set_edge_properties_by_indices(m, "a", "b", prob=0.3)
@@ -465,7 +442,7 @@ set_edge_properties_by_labels = function(m, from, to, ...) {
 #'
 #' @examples
 #' P = matrix( rep(1/3,9), ncol=3)
-#' m = new_mc_from_matrix(P)
+#' m = new_markov_chain_from_matrix(P)
 curve_overlapping_edges = function(m, curve = pkg.env$default.curve) {
   if (nedges(m) == 0) return(m)
 

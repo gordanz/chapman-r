@@ -1,4 +1,4 @@
-# The print method for mc -------------------------------------------------
+# The print method for markov_chain objects -------------------------------------------------
 
 output_states = function(m) {
   out = paste0("States(", length(m), ")")
@@ -33,22 +33,22 @@ output_edges = function(m) {
   return(out)
 }
 
-#' The print method for the MC class
+#' The print method for the markov_chain class
 #'
-#' @param m mc object
+#' @param m a markov_chain object
 #' @export
 #'
 #' @examples
-print.mc <- function(x) {
+print.markov_chain <- function(x) {
   m=x # x is for consistency with print.
   print(paste("Name:", m$name))
   print(output_states(m))
   print(output_edges(m))
 }
 
-# The plot method for MC --------------------------------------------------
+# The plot method for markov_chain --------------------------------------------------
 
-#' Rotate the layour of an mc
+#' Rotate the layout of a markov_chain
 #'
 #' @param m
 #' @param alpha angle
@@ -93,7 +93,7 @@ autoscale <- function(m, ...) {
   return(m)
 }
 
-#' Stretch (scale) the layout of an mc
+#' Stretch (scale) the layout of a markov_chain
 #'
 #' @param m
 #' @param ax stretch factor in x
@@ -110,7 +110,7 @@ stretch <- function(m, ax,ay=ax){
   return(m)
 }
 
-#' Shift the layout of an mc
+#' Shift the layout of a markov_chain
 #'
 #' @param m
 #' @param ax shift amount in x
@@ -145,7 +145,7 @@ set_fancy_layout = function(m, algorithm = pkg.env$default.layout.algorithm) {
   return(m)
 }
 
-#' Sets graphics parameters of a mc
+#' Sets graphics parameters of a markov_chain
 #'
 #' @param m
 #' @param ... the parameters to be set
@@ -154,7 +154,7 @@ set_fancy_layout = function(m, algorithm = pkg.env$default.layout.algorithm) {
 #' @export
 #'
 #' @examples
-#' m = random_mc(3)
+#' m = random_markov_chain(3)
 #' plot(m)
 #' m = set_graphics_parameters(edge.label = NA)
 #' plot(m)
@@ -175,7 +175,7 @@ set_graphics_parameters = function(m, ...) {
 #' @export
 #'
 #' @examples
-#' m = color_tester_mc(15)
+#' m = color_tester_markov_chain(15)
 #' m = set_fancy_edge_colors(m)
 #' plot(m)
 set_fancy_edge_colors = function (m,
@@ -243,7 +243,7 @@ set_absorbing_state_color <- function(m,
 
 }
 
-#' Plot method for a mc object
+#' Plot method for a markov_chain object
 #'
 #' @param m
 #'
@@ -251,7 +251,7 @@ set_absorbing_state_color <- function(m,
 #' @export
 #'
 #' @examples
-plot.mc <- function(x, ... ) {
+plot.markov_chain <- function(x, ... ) {
   m=x # x is for consistency with plot
   from_function_call = list(...)
   from_graphics_parameters = m$graphics_parameters

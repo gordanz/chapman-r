@@ -2,7 +2,7 @@
 #'
 #' Description?
 #'
-#' @section Lanci functions:
+#' @section chapman functions:
 #' The chapman functions ...
 #'
 #' @docType package
