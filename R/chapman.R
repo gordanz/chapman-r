@@ -1,0 +1,11 @@
+#' chapman: A package with helper functions and data for M362M
+#'
+#' Description?
+#'
+#' @section Lanci functions:
+#' The chapman functions ...
+#'
+#' @docType package
+#' @name chapman
+NULL
+#> NULL

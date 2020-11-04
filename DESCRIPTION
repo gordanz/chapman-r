@@ -1,0 +1,25 @@
+Package: chapman
+Title: A Companion Package for M362M "Introduction to Stochastic Processes"
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Gordan",
+           family = "Zitkovic",
+           role = c("aut", "cre"),
+           email = "gordanz@math.utexas.edu")
+Description: A repository of various functions and datasets for M362M "Introduction to Stochastic Processes"
+License: AGPL-3
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Imports:
+  tibble,
+  tidyr,
+  dplyr,
+  utils,
+  magrittr,
+  kableExtra,
+  graphics,
+  igraph,
+  viridisLite
+	
