@@ -1,32 +1,24 @@
 # Defaults ----------------------------------------------------------------
 
-pkg.env <- new.env()
-
-pkg.env$default.vertex.size <- 25
-pkg.env$default.vertex.label.cex <- 1
-
-pkg.env$default.layout.algorithm <- igraph::layout_with_kk
-
-pkg.env$default.state.color <- "beige"
-pkg.env$default.absorbing.color <- "orange"
-pkg.env$default.state.shape = "circle"
-
-pkg.env$default.edge.arrow.size = 0.5
-
-pkg.env$default.edge.color <- "gray"
-pkg.env$default.one.color <- "black"
-pkg.env$default.continuous.edge.palette <- colorRampPalette(c("yellow", "darkorange4"))
-pkg.env$default.discrete.edge.palette <- function(n) {
-  if (n < 3)
-    n = 3
-  RColorBrewer::brewer.pal(n, "Set2")
-}
-pkg.env$default.curve <- 0.5
-
-pkg.env$default.state.label = function(m) paste(length(m)+1)
-pkg.env$default.edge.label = function(prob) {
-  if (prob == 1)
-    return("")
-  else
-    return(paste(prob))
-}
+default = list(
+  # states/vertices
+  state.color = "beige",
+  state.shape = "circle",
+  state.x = NA,
+  state.y = NA,
+  state.label.function = function(m) paste(length(m)+1),
+  vertex.size = 25,
+  vertex.label.cex = 1,
+  absorbing.state.color = "orange",
+  # edges
+  edge.arrow.size = 0.5,
+  edge.color = "gray",
+  edge.label.function = function(prob) ifelse(prob==1, "", paste(prob)),
+  edge.curve = 0.5,
+  edge.one.color = "black",
+  edge.loop_angle = 0,
+  # other
+  continuous.edge.palette = colorRampPalette(c("yellow", "darkorange4")),
+  discrete.edge.palette = function(n) RColorBrewer::brewer.pal(max(n,3), "Set2"),
+  layout.algorithm = igraph::layout_with_kk
+)
