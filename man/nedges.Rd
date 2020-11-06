@@ -16,8 +16,8 @@ integer
 Return the number of edges
 }
 \examples{
-m = new_markov_chain(32)
-m = add_edge_by_labels("1","2")
-m = add_edge_by_labels("1","3")
+m = markov_chain(3) \%>\%
+  add_edge(1,2) \%>\%
+  add_edge(1,3)
 print(nedges(m))
 }

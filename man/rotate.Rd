@@ -11,7 +11,7 @@ rotate(m, alpha, pca = FALSE)
 
 \item{alpha}{angle}
 
-\item{pca}{whether to set angle using PCA}
+\item{pca}{whether to set angle using principal components}
 }
 \value{
 

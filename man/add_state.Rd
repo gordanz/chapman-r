@@ -4,7 +4,7 @@
 \alias{add_state}
 \title{Adds a state to a markov_chain}
 \usage{
-add_state(m, l, ...)
+add_state(m, l = NA, ...)
 }
 \arguments{
 \item{m}{a markov_chain object}

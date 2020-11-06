@@ -7,10 +7,7 @@
 #' @return
 #' @export
 #'
-markov_chain <- function(x, ...) {
-
-  if (x==0)
-    return(markov_chain_empty(...))
+markov_chain <- function(x=0, ...) {
 
   if ("matrix" %in% class(x))
     return(markov_chain_matrix(x,...))
@@ -26,7 +23,10 @@ markov_chain <- function(x, ...) {
     if (length(x)>1) {
       return(markov_chain_vector(x, ...))
     } else {
-      return(markov_chain_integer(x, ...))
+      if (x==0)
+        return(markov_chain_empty(...))
+      else
+        return(markov_chain_integer(x, ...))
     }
   }
   stop("Don't know how to make a Markov chain from the input.")
@@ -108,4 +108,43 @@ markov_chain_data_frame = function(d, ...)
     m = do.call(add_edge_by_labels, c(list(m), d[i,]))
   }
   return(m)
+}
+
+
+
+#' Builds a mc with random transitions
+#'
+#' @param n number of states
+#' @param p a parameter governing the total number of edges
+#'
+#'
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' m = random_mc(3, p = 0.4)
+#' print(transition_matrix(m))
+markov_chain_random <- function(n, p = 0.5) {
+  P = t(replicate(n, random_row(n, p)))
+  m = P %>%
+    markov_chain_matrix %>%
+    set_auto_layout %>%
+    rotate(pca=TRUE) %>%
+    set_graphics_parameters(edge.label = NA) %>%
+    curve_overlapping_edges()
+  m$edges$loop_angle = -pi / 2
+  return(m)
+}
+
+
+random_row <- function(n, p) {
+  num = rbinom(1, n - 1, p) + 1
+  non_zeros = runif(num) %>%
+    scale(center = F)
+  row = c(non_zeros, rep(0, n - num)) %>%
+    sample
+
+  return(row / sum(row))
+
 }

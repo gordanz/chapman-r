@@ -4,12 +4,10 @@
 #'
 #' @param m a markov_chain object
 #' @param alpha angle
-#' @param pca whether to set angle using PCA
+#' @param pca whether to set angle using principal components
 #'
 #' @return
 #' @export
-#'
-#' @examples
 rotate <- function(m, alpha, pca = FALSE) {
 
   if (!pca & missing(alpha)){
@@ -54,9 +52,8 @@ autoscale <- function(m, ...) {
 #'
 #' @examples
 stretch <- function(m, ax,ay=ax){
-  points = m$layout
-  A = matrix(c(ax,0,0,ay),nrow=2)
-  m$layout = (points %*% A)
+  m$layout = m$layout %*%
+    matrix(c(ax,0,0,ay),nrow=2)
   return(m)
 }
 
@@ -68,16 +65,11 @@ stretch <- function(m, ax,ay=ax){
 #'
 #' @return
 #' @export
-#'
-#' @examples
 shift <- function(m, ax,ay=0){
-  points = m$layout
-  A = matrix(c(ax,ay),byrow = TRUE, ncol=2, nrow=nrow(points))
-  m$layout = points + A
+  m$layout = m$layout +
+    matrix(c(ax,ay),byrow = TRUE, ncol=2, nrow=nrow(m$layout))
   return(m)
 }
-
-
 
 #' Sets an automatic layout using the specified algorithm
 #'
@@ -105,16 +97,18 @@ set_auto_layout = function(m, algorithm = default$layout.algorithm) {
 #' @examples
 #' P = matrix( rep(1/3,9), ncol=3)
 #' m = new_markov_chain_from_matrix(P)
-curve_overlapping_edges = function(m, curve = pkg.env$default.curve) {
+curve_overlapping_edges = function(m, curve = default$edge.curve) {
   if (nedges(m) == 0) return(m)
 
   for (k in 1:nedges(m)) {
     i = m$edges$from[k]
     j = m$edges$to[k]
-    if (index_pair_to_edge(m,j,i))
+
+    if (edge_of(m,j,i))
     {
-      m = set_edge_properties_by_indices(m, i, j, curve=curve)
-      m = set_edge_properties_by_indices(m, j, i, curve=curve)
+      m = m %>%
+        set_edge(i, j, curve=curve) %>%
+        set_edge(j, i, curve=curve)
     }
   }
   return(m)

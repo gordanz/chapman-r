@@ -4,7 +4,7 @@
 \alias{markov_chain}
 \title{Construct a markov_chain object}
 \usage{
-markov_chain(x, ...)
+markov_chain(x = 0, ...)
 }
 \arguments{
 \item{x}{The object from which the chain is to be constructed. Can be a single integer, a vector, a matrix or a data frame.}

@@ -7,7 +7,7 @@
 set_auto_edge_colors(m, discrete = T, nbins = 3, ...)
 }
 \arguments{
-\item{discrete}{logical, distonguishable vs. in order}
+\item{discrete}{logical, distinguishable vs. in order}
 
 \item{nbins}{if discrete, how many categories}
 

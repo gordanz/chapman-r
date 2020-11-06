@@ -38,7 +38,7 @@ check_index = function(m, index) {
 
 
 index_of <- function(m, x) {
-  if (class(x)!="integer" & class(x)!="numeric") {
+  if (class(x) == "integer" | class(x) == "numeric") {
     check_index(m,x)
     return(x)
   } else {
@@ -62,8 +62,9 @@ label_of <- function(m, x) {
 
 
 edge_of = function(m, from, to) {
-  from = index_of(from)
-  to = index_of(to)
+  from = index_of(m,from)
+  to = index_of(m,to)
+
   edge_indices = which((m$edges$from == from &
                           m$edges$to == to))
   if (length(edge_indices) > 1)
@@ -146,26 +147,18 @@ add_state_by_label <- function(m,...) {
 #'
 #'
 #' @examples
-add_edge <- function(m,from, to, prob=1, ...) {
-  add_edge_by_indices(m,
-                      from=index_of(m,from),
-                      to=index_of(m,to),
-                      prob=prob,  ...)
 
-}
-
-add_edge_by_indices <- function(m, from, to, prob=1, ...) {
+add_edge <- function(m, from, to, prob=1, ...) {
   defaults = list(
     color = ifelse(prob<1, default$edge.color, default$edge.one.color),
     loop_angle = default$edge.loop_angle,
     label = default$edge.label.function(prob),
-    curve = default$edge.curve,
-    from = from,
-    to = to,
+    curve = 0,
+    from = index_of(m,from),
+    to = index_of(m,to),
     prob = prob
   )
   args = modifyList(defaults, list(...))
-
   m$edges = do.call(tibble::add_row, c(list(m$edges),args))
   return(m)
 }
@@ -182,24 +175,25 @@ add_edge_by_indices <- function(m, from, to, prob=1, ...) {
 #' @export
 #'
 #' @examples
-#' m = new_markov_chain("Chain",2)
-#' m = set_state_properties(m,1, color="Aquamarine")
+#' m = markov_chain(3)
+#' m = set_state(m,c(1,3), color="Aquamarine")
 #' print(m$states)
-set_state_properties = function(m, x, ...) {
-  index = index_of(m,x)
+set_state = function(m, x, ...) {
   properties <- list(...)
   if (!all(names(properties) %in% names(m$states)))
     stop("Trying to set a non-existing property.")
-  m$states[index, names(properties)] = properties
+  for (s in x) {
+    m$states[index_of(m,s), names(properties)] = properties
+  }
   return(m)
 }
 
-#' Sets a edge properties
+#' Sets edge properties
 #'
 #' @param m
 #' @param from if integer index, otherwise state label
 #' @param to if integer index, otherwise state label
-#' @param ... named properties to be set
+#' @param ... a list of named properties to be set
 #'
 #' @return markov_chain
 #' @export
@@ -207,9 +201,9 @@ set_state_properties = function(m, x, ...) {
 #' @examples
 #' m = markov_chain(2)
 #' m = add_edge(m,1,2,prob=0.2)
-#' m = set_edge_properties(m,1,2, prob=0.3)
+#' m = set_edge_(m,1,2, prob=0.3)
 #' print(m$edges)
-set_edge_properties = function(m, from, to, ...) {
+set_edge= function(m, from, to, ...) {
   from = index_of(m,from)
   to = index_of(m,to)
   properties <- list(...)

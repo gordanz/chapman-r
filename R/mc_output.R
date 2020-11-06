@@ -22,7 +22,7 @@ set_graphics_parameters = function(m, ...) {
 #' Colors edges according to their probabilities
 #'
 #' @param m
-#' @param discrete logical, distonguishable vs. in order
+#' @param discrete logical, distinguishable vs. in order
 #' @param nbins if discrete, how many categories
 #' @param ...
 #'
@@ -33,10 +33,7 @@ set_graphics_parameters = function(m, ...) {
 #' m = color_tester_markov_chain(15)
 #' m = set_fancy_edge_colors(m)
 #' plot(m)
-set_auto_edge_colors = function (m,
-                                  discrete = T,
-                                  nbins = 3,
-                                  ...) {
+set_auto_edge_colors = function (m, discrete = T, nbins = 3, ...) {
 
   nbins = min(12, max(1, as.integer(nbins)))
 
@@ -56,7 +53,6 @@ set_auto_edge_colors = function (m,
     codes = round(m$edges$prob * nbins)
 
   }
-  # m$edges$codes = codes
 
   # palette settings
   args = list(...)
@@ -64,9 +60,9 @@ set_auto_edge_colors = function (m,
     the_palette_vector = args$palette(nbins)
   } else {
     if (discrete) {
-      the_palette = pkg.env$default.discrete.edge.palette(nbins)
+      the_palette = default$discrete.edge.palette(nbins)
     } else {
-      the_palette = pkg.env$default.continuous.edge.palette(1000)
+      the_palette = default$continuous.edge.palette(1000)
     }
   }
 
@@ -82,7 +78,7 @@ set_auto_edge_colors = function (m,
 }
 
 set_absorbing_state_color <- function(m,
-              color = pkg.env$default.absorbing.color) {
+              color = default$absorbing.state.color) {
 
   if (!nedges(m))
     return(m)
@@ -121,9 +117,9 @@ plot.markov_chain <- function(x, ... ) {
           vertex.label = m$states$label,
           vertex.shape = m$states$shape,
           edge.loop.angle = m$edges$loop_angle,
-          vertex.size = pkg.env$default.vertex.size,
-          vertex.label.cex = pkg.env$default.vertex.label.cex,
-          edge.arrow.size = pkg.env$default.edge.arrow.size,
+          vertex.size = default$vertex.size,
+          vertex.label.cex = default$vertex.label.cex,
+          edge.arrow.size = default$edge.arrow.size,
           edge.color = m$edges$color,
           rescale = FALSE,
           add.vertex.names = FALSE
