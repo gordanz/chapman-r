@@ -7,6 +7,8 @@
 random_walk(T = 3, p = 0.5, reflecting = FALSE, with_dots = FALSE)
 }
 \arguments{
+\item{T}{the random walk goes from -T to T}
+
 \item{p}{the probability of the step to the right}
 
 \item{reflecting}{whether the states T and -T should be reflecting (otherwise absorbing)}
@@ -14,7 +16,7 @@ random_walk(T = 3, p = 0.5, reflecting = FALSE, with_dots = FALSE)
 \item{with_dots}{whether the states T and -T should be replaced by dots (to look good in lecture notes)}
 }
 \value{
-
+a markov chain object
 }
 \description{
 Random walk

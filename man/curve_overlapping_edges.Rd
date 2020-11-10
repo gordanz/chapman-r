@@ -7,15 +7,13 @@
 curve_overlapping_edges(m, curve = default$edge.curve)
 }
 \arguments{
+\item{m}{a markov_chain object}
+
 \item{curve}{the curvature}
 }
 \value{
-
+a markov_chain object
 }
 \description{
 Make overlapping edges avoid each other
-}
-\examples{
-P = matrix( rep(1/3,9), ncol=3)
-m = new_markov_chain_from_matrix(P)
 }

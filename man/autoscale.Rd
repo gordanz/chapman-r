@@ -7,10 +7,12 @@
 autoscale(m, ...)
 }
 \arguments{
+\item{m}{a markov_chain object}
+
 \item{...}{additional arguments to builtin "scale"}
 }
 \value{
-
+a markov_chain object
 }
 \description{
 Scales the layout to mean=0, var=1

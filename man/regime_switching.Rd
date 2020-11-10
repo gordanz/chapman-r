@@ -2,7 +2,7 @@
 % Please edit documentation in R/mc_examples.R
 \name{regime_switching}
 \alias{regime_switching}
-\title{The regime-swithcin Markov chain}
+\title{The regime-switching Markov chain}
 \usage{
 regime_switching(p12 = 0.4, p21 = 0.7)
 }
@@ -12,8 +12,8 @@ regime_switching(p12 = 0.4, p21 = 0.7)
 \item{p21}{probability of the transition 2->1}
 }
 \value{
-
+a markov_chain object
 }
 \description{
-The regime-swithcin Markov chain
+The regime-switching Markov chain
 }

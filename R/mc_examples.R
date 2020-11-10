@@ -5,17 +5,16 @@ color_tester <- function(n) {
   m = markov_chain(P) %>%
     set_auto_layout(igraph::layout_in_circle)
   return(m)
-
 }
-
 
 #' Random walk
 #'
+#' @param T the random walk goes from -T to T
 #' @param p the probability of the step to the right
 #' @param reflecting whether the states T and -T should be reflecting (otherwise absorbing)
 #' @param with_dots whether the states T and -T should be replaced by dots (to look good in lecture notes)
 #'
-#' @return
+#' @return a markov chain object
 #' @export
 #'
 #' @examples
@@ -72,19 +71,21 @@ random_walk <- function(T=3, p=0.5, reflecting = FALSE, with_dots = FALSE) {
 
 #' Deterministically monotone markov chain
 #'
-#' @return
+#' @param T the position of the state cut-off ("...")
+#' @return a markov_chain object
 #' @export
-#'
-#' @examples
 deterministically_monotone = function(T=6) {
   m = markov_chain()
   for (i in 1:T) {
-    m = m %>% add_state(paste(i-1), x = i-1, y=0)
+    m = m %>%
+      add_state(paste(i-1), x = i-1, y=0)
   }
-  m = m %>% add_state("...", x = T, y=0, shape="none")
+  m = m %>%
+    add_state("...", x = T, y=0, shape="none")
 
   for (i in 1:T) {
-    m = m %>% add_edge(i, i+1, prob=1)
+    m = m %>%
+      add_edge(i, i+1)
   }
 
   # layout
@@ -104,10 +105,8 @@ deterministically_monotone = function(T=6) {
 #' @param pA probability of choosing cycle 1
 #' @param tail whether there is a short tail
 #'
-#' @return mc
+#' @return a markov_chain object
 #' @export
-#'
-#' @examples
 attached_cycles <- function(n1 = 4, n2 = 6, pA = 0.4, tail = FALSE) {
 
   if (n1 <= 1 | n2 <= 1)
@@ -132,7 +131,6 @@ attached_cycles <- function(n1 = 4, n2 = 6, pA = 0.4, tail = FALSE) {
   if ( n2 > 2 )
     for (i in (2:(n2-1)))
       m = m %>% add_edge(paste0("B",i), paste0("B",i+1))
-
 
   # adding a tail
   if (tail) {
@@ -166,10 +164,8 @@ attached_cycles <- function(n1 = 4, n2 = 6, pA = 0.4, tail = FALSE) {
 #' @param a desired winnings
 #' @param p probability of winning 1 $
 #'
-#' @return
+#' @return a markov_chain object
 #' @export
-#'
-#' @examples
 gamblers_ruin <- function(a = 5, p = 0.25) {
   if (a <= 2)
     stop("a must be at least 3")
@@ -198,21 +194,18 @@ gamblers_ruin <- function(a = 5, p = 0.25) {
     stretch(0.3, 1) %>%
     curve_overlapping_edges %>%
     set_absorbing_state_color %>%
-    set_auto_edge_colors  %>%
-    set_graphics_parameters(vertex.size = 20)
+    set_auto_edge_colors
 
   return(m)
 }
 
-#' The regime-swithcin Markov chain
+#' The regime-switching Markov chain
 #'
 #' @param p12 probability of the transition 1->2
 #' @param p21 probability of the transition 2->1
 #'
-#' @return
+#' @return a markov_chain object
 #' @export
-#'
-#' @examples
 regime_switching = function(p12 = 0.4, p21 = 0.7) {
   # states
   m = markov_chain(name = "Regime Switching") %>%
@@ -229,7 +222,7 @@ regime_switching = function(p12 = 0.4, p21 = 0.7) {
   # layout
   m = m %>%
     curve_overlapping_edges %>%
-    set_auto_edge_colors(nbin = 4)
+    set_auto_edge_colors(nbins = 4)
 
   return(m)
 
@@ -238,52 +231,58 @@ regime_switching = function(p12 = 0.4, p21 = 0.7) {
 
 
 
-# professor <- function(p_morning=0.05, p_afternoon = 0.20) {
-#
-#   # constants
-#   q_morning = 1-p_morning
-#   q_afternoon = 1-p_afternoon
-#   p_morning_label = "p_m"
-#   q_morning_label = "q_m"
-#   p_afternoon_label = "p_a"
-#   q_afternoon_label = "q_a"
-#
-#   # states
-#   m = markov_chain(name = "Professor") %>%
-#     add_state("0,5,H", x = -5, y = -1) %>%
-#     add_state("1,4,H", x = -3, y = -1) %>%
-#     add_state("2,3,H", x = -1, y = -1) %>%
-#     add_state("3,2,H", x =  1, y = -1) %>%
-#     add_state("4,1,H", x =  3, y = -1) %>%
-#     add_state("5,0,H", x =  5, y = -1) %>%
-#     add_state("0,5,W", x = -5, y = 1) %>%
-#     add_state("1,4,W", x = -3, y = 1) %>%
-#     add_state("2,3,W", x = -1, y = 1) %>%
-#     add_state("3,2,W", x =  1, y = 1) %>%
-#     add_state("4,1,W", x =  3, y = 1) %>%
-#     add_state("5,0,W", x =  5, y = 1) %>%
-#     add_state("Wet",   x = -6, y = 0)
-#
-#   m = m %>%
-#     add_edge("0,5,H", "Wet", p_morning)
-#
-#   m$layout = m$layout %>%
-#     stretch(0.5,0.5) %>%
-#     set_graphics_parameters(
-#     vertex.size = 35
-#   )
-#
-#   return(m)
-# }
+#' A Markov Chain for the problem with the professor and umbrellas
+#'
+#' @param p_morning probability of getting wet in the morning
+#' @param p_afternoon probability of getting wet in the afternoon
+#'
+#' @return a markov_chain object
+#' @export
+#'
+professor <- function(p_morning=0.05, p_afternoon = 0.20) {
+
+  # constants
+  q_morning = 1-p_morning
+  q_afternoon = 1-p_afternoon
+  p_morning_label = "p_m"
+  q_morning_label = "q_m"
+  p_afternoon_label = "p_a"
+  q_afternoon_label = "q_a"
+
+  # states
+  m = markov_chain() %>%
+    add_state("0,5,H", x = -5, y = -1) %>%
+    add_state("1,4,H", x = -3, y = -1) %>%
+    add_state("2,3,H", x = -1, y = -1) %>%
+    add_state("3,2,H", x =  1, y = -1) %>%
+    add_state("4,1,H", x =  3, y = -1) %>%
+    add_state("5,0,H", x =  5, y = -1) %>%
+    add_state("0,5,W", x = -5, y = 1) %>%
+    add_state("1,4,W", x = -3, y = 1) %>%
+    add_state("2,3,W", x = -1, y = 1) %>%
+    add_state("3,2,W", x =  1, y = 1) %>%
+    add_state("4,1,W", x =  3, y = 1) %>%
+    add_state("5,0,W", x =  5, y = 1) %>%
+    add_state("Wet",   x = -6, y = 0)
+
+  m = m %>%
+    add_edge("0,5,H", "Wet", p_morning)
+
+  m$layout = m$layout %>%
+    stretch(0.5,0.5) %>%
+    set_graphics_parameters(
+    vertex.size = 35
+  )
+
+  return(m)
+}
 
 #' The tennis chain
 #'
 #' @param p probability of winning for player 1 in a single rally
 #'
-#' @return
+#' @return a markov_chain object
 #' @export
-#'
-#' @examples
 tennis <- function(p=0.4) {
 
   ps = matrix(
@@ -335,10 +334,8 @@ tennis <- function(p=0.4) {
   for (i in 1:dim(qs)[1])
     m = m %>% add_edge(qs[i,1], qs[i,2], prob = 1-p)
 
-
   for (i in 1:dim(ps)[1])
     m = m %>% add_edge(ps[i,1], ps[i,2], prob = p)
-
 
   m = m %>%
     add_edge("P1","P1",loop_angle=-45) %>%
@@ -350,7 +347,8 @@ tennis <- function(p=0.4) {
     curve_overlapping_edges %>%
     set_auto_edge_colors %>%
     set_absorbing_state_color %>%
-    set_graphics_parameters(vertex.label.cex = 0.7) %>%
+    set_graphics_parameters(vertex.label.cex = 0.7,
+                            vertex.size = 32) %>%
     autoscale %>%
     rotate(-1.362 * pi) %>%
     stretch(1.3,1) %>%
@@ -360,14 +358,13 @@ tennis <- function(p=0.4) {
 
 #' Chain from the problem "deck22"
 #'
-#' @return
+#' @return a markov_chain object
 #' @export
-#'
-#' @examples
+
 deck22 = function() {
 
   # States
-  m = markov_chain(name = "Deck-2-2") %>%
+  m = markov_chain() %>%
     add_state(c("22", "21b", "12r", "11r", "11b", "02r",
              "01r", "10b", "01b", "00"))
 

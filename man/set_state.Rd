@@ -14,13 +14,8 @@ set_state(m, x, ...)
 \item{...}{named properties to be set}
 }
 \value{
-markov_chain
+a markov_chain object
 }
 \description{
 Sets properties of a state
-}
-\examples{
-m = markov_chain(3)
-m = set_state(m,c(1,3), color="Aquamarine")
-print(m$states)
 }

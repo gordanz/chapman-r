@@ -2,17 +2,10 @@
 
 #' Sets graphics parameters of a markov_chain
 #'
-#' @param m
+#' @param m a markov_chain object
 #' @param ... the parameters to be set
 #'
-#' @return
 #' @export
-#'
-#' @examples
-#' m = random_markov_chain(3)
-#' plot(m)
-#' m = set_graphics_parameters(edge.label = NA)
-#' plot(m)
 set_graphics_parameters = function(m, ...) {
   m$graphics_parameters = c(m$graphics_parameters, ...)
   return(m)
@@ -21,18 +14,12 @@ set_graphics_parameters = function(m, ...) {
 
 #' Colors edges according to their probabilities
 #'
-#' @param m
+#' @param m a markov_chain object
 #' @param discrete logical, distinguishable vs. in order
 #' @param nbins if discrete, how many categories
-#' @param ...
+#' @param ... additional arguments (palette)
 #'
-#' @return
 #' @export
-#'
-#' @examples
-#' m = color_tester_markov_chain(15)
-#' m = set_fancy_edge_colors(m)
-#' plot(m)
 set_auto_edge_colors = function (m, discrete = T, nbins = 3, ...) {
 
   nbins = min(12, max(1, as.integer(nbins)))
@@ -69,7 +56,7 @@ set_auto_edge_colors = function (m, discrete = T, nbins = 3, ...) {
   # set colors
   m$edges =
     m$edges %>%
-    mutate(color = ifelse(prob == 1, "black",
+    dplyr::mutate(color = ifelse(prob == 1, "black",
                           the_palette[codes]))
   m = m %>% set_graphics_parameters(edge.label = NA)
 
@@ -96,19 +83,17 @@ set_absorbing_state_color <- function(m,
 
 #' Plot method for a markov_chain object
 #'
-#' @param m
+#' @param x the markov_chain object to be plotted
+#' @param ... additional graphics parameters
 #'
-#' @return
 #' @export
-#'
-#' @examples
 plot.markov_chain <- function(x, ... ) {
   m=x # x is for consistency with plot
   from_function_call = list(...)
   from_graphics_parameters = m$graphics_parameters
 
   if (any(is.na(m$layout))) {
-    m = m %>% set_fancy_layout
+    m = m %>% set_auto_layout
   }
   from_graphics_parameters$layout = m$layout
   from_here  =
@@ -128,10 +113,28 @@ plot.markov_chain <- function(x, ... ) {
   g = igraph::graph_from_data_frame(m$edges,
                                     directed = TRUE,
                                     vertices = m$states)
+  #limits
+  mrg = 0.08
+  x_range = range(m$layout[,1])
+  dx = x_range[2]-x_range[1]
+  x_range[2] = x_range[2] + mrg* dx
+  x_range[1] = x_range[1] - mrg* dx
+
+  y_range = range(m$layout[,2])
+  dy = y_range[2]-y_range[1]
+  y_range[2] = y_range[2] + mrg* dy
+  y_range[1] = y_range[1] - mrg* dy
+
+  from_here_lim = list(
+    xlim = c(x_range[1], x_range[2]),
+    ylim = c(y_range[1], y_range[2])
+  )
+
   arguments=c(
     list(x=g),
     from_function_call,
     from_graphics_parameters,
+    from_here_lim,
     from_here)
   igraph::igraph_options(verbose = TRUE)
 

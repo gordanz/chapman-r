@@ -7,10 +7,12 @@
 set_auto_layout(m, algorithm = default$layout.algorithm)
 }
 \arguments{
+\item{m}{a markov_chain object}
+
 \item{algorithm}{an igraph layout algorithm}
 }
 \value{
-
+a markov_chain object
 }
 \description{
 Sets an automatic layout using the specified algorithm

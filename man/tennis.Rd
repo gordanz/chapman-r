@@ -10,7 +10,7 @@ tennis(p = 0.4)
 \item{p}{probability of winning for player 1 in a single rally}
 }
 \value{
-
+a markov_chain object
 }
 \description{
 The tennis chain

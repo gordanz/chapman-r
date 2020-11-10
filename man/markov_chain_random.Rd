@@ -2,7 +2,7 @@
 % Please edit documentation in R/mc_constructors.R
 \name{markov_chain_random}
 \alias{markov_chain_random}
-\title{Builds a mc with random transitions}
+\title{Builds a markov chain with random transitions}
 \usage{
 markov_chain_random(n, p = 0.5)
 }
@@ -12,12 +12,8 @@ markov_chain_random(n, p = 0.5)
 \item{p}{a parameter governing the total number of edges}
 }
 \value{
-
+a markov_chain object
 }
 \description{
-Builds a mc with random transitions
-}
-\examples{
-m = random_mc(3, p = 0.4)
-print(transition_matrix(m))
+Builds a markov chain with random transitions
 }

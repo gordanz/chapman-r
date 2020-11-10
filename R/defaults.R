@@ -11,7 +11,7 @@ default = list(
   vertex.label.cex = 1,
   absorbing.state.color = "orange",
   # edges
-  edge.arrow.size = 0.5,
+  edge.arrow.size = 0.4,
   edge.color = "gray",
   edge.label.function = function(prob) ifelse(prob==1, "", paste(prob)),
   edge.curve = 0.5,

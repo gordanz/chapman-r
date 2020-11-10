@@ -7,17 +7,10 @@
 set_graphics_parameters(m, ...)
 }
 \arguments{
-\item{...}{the parameters to be set}
-}
-\value{
+\item{m}{a markov_chain object}
 
+\item{...}{the parameters to be set}
 }
 \description{
 Sets graphics parameters of a markov_chain
-}
-\examples{
-m = random_markov_chain(3)
-plot(m)
-m = set_graphics_parameters(edge.label = NA)
-plot(m)
 }

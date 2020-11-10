@@ -9,19 +9,14 @@ add_state(m, l = NA, ...)
 \arguments{
 \item{m}{a markov_chain object}
 
-\item{...}{Extra arguments like color, x, y, etc.}
+\item{l}{a vector. States with labels in l (cast to strings) are added. If length(l)==1
+and l is numeric, l states with labels "1", ..., "l" are added.}
 
-\item{v}{a vector. States with labels in v (cast to strings) are added. If length(v)==1
-and v is numeric, v states with labels "1", ..., "v" are added.}
+\item{...}{Extra arguments like color, x, y, etc.}
 }
 \value{
 markov_chain object
 }
 \description{
 Adds a state to a markov_chain
-}
-\examples{
-m = new_markov_chain(0)
-m = add_state(m,c("a","b","c"), x=1, y=2, color = "reddish")
-print(m)
 }

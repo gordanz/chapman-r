@@ -15,9 +15,3 @@ integer
 \description{
 Return the number of edges
 }
-\examples{
-m = markov_chain(3) \%>\%
-  add_edge(1,2) \%>\%
-  add_edge(1,3)
-print(nedges(m))
-}

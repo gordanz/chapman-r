@@ -6,10 +6,6 @@
 #'
 #' @return integer
 #' @export
-#'
-#' @examples
-#' m = new_markov_chain(c("a","b","c"))
-#' print(length(m))
 length.markov_chain = function(x) {
   m = x # x is for consistency with length
   nrow(m$states)
@@ -21,12 +17,6 @@ length.markov_chain = function(x) {
 #'
 #' @return integer
 #' @export
-#'
-#' @examples
-#' m = markov_chain(3) %>%
-#'   add_edge(1,2) %>%
-#'   add_edge(1,3)
-#' print(nedges(m))
 nedges = function(m) {
   nrow(m$edges)
 }
@@ -46,7 +36,7 @@ index_of <- function(m, x) {
     if (index)
       return(index)
     else
-      stop(paste("No label", label))
+      stop(paste("No label", x))
   }
 }
 
@@ -88,17 +78,13 @@ e = edge_of
 #' Adds a state to a markov_chain
 #'
 #' @param m a markov_chain object
-#' @param v a vector. States with labels in v (cast to strings) are added. If length(v)==1
-#'   and v is numeric, v states with labels "1", ..., "v" are added.
+#' @param l a vector. States with labels in l (cast to strings) are added. If length(l)==1
+#'   and l is numeric, l states with labels "1", ..., "l" are added.
 #' @param ... Extra arguments like color, x, y, etc.
 #'
 #' @return markov_chain object
 #' @export
 #'
-#' @examples
-#' m = new_markov_chain(0)
-#' m = add_state(m,c("a","b","c"), x=1, y=2, color = "reddish")
-#' print(m)
 add_state <- function(m, l=NA, ...) {
 
   if (anyNA(l))
@@ -128,7 +114,7 @@ add_state_by_label <- function(m,...) {
     y = default$state.y,
     index = length(m)+1
   )
-  args = modifyList(defaults, list(...))
+  args = utils::modifyList(defaults, list(...))
   m$states = do.call(tibble::add_row, c(list(m$states),args))
   m$layout = rbind(m$layout, c(args$x,args$y))
   return(m)
@@ -144,10 +130,6 @@ add_state_by_label <- function(m,...) {
 #'
 #' @return markov_chain object
 #' @export
-#'
-#'
-#' @examples
-
 add_edge <- function(m, from, to, prob=1, ...) {
   defaults = list(
     color = ifelse(prob<1, default$edge.color, default$edge.one.color),
@@ -158,7 +140,7 @@ add_edge <- function(m, from, to, prob=1, ...) {
     to = index_of(m,to),
     prob = prob
   )
-  args = modifyList(defaults, list(...))
+  args = utils::modifyList(defaults, list(...))
   m$edges = do.call(tibble::add_row, c(list(m$edges),args))
   return(m)
 }
@@ -171,13 +153,8 @@ add_edge <- function(m, from, to, prob=1, ...) {
 #' @param x if integer, state index, otherwise state label
 #' @param ... named properties to be set
 #'
-#' @return markov_chain
+#' @return a markov_chain object
 #' @export
-#'
-#' @examples
-#' m = markov_chain(3)
-#' m = set_state(m,c(1,3), color="Aquamarine")
-#' print(m$states)
 set_state = function(m, x, ...) {
   properties <- list(...)
   if (!all(names(properties) %in% names(m$states)))
@@ -190,19 +167,13 @@ set_state = function(m, x, ...) {
 
 #' Sets edge properties
 #'
-#' @param m
+#' @param m a markov_chain object
 #' @param from if integer index, otherwise state label
 #' @param to if integer index, otherwise state label
 #' @param ... a list of named properties to be set
 #'
 #' @return markov_chain
 #' @export
-#'
-#' @examples
-#' m = markov_chain(2)
-#' m = add_edge(m,1,2,prob=0.2)
-#' m = set_edge_(m,1,2, prob=0.3)
-#' print(m$edges)
 set_edge= function(m, from, to, ...) {
   from = index_of(m,from)
   to = index_of(m,to)

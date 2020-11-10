@@ -1,31 +1,20 @@
----
-output: github_document
-always_allow_html: true
----
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "100%"
-)
-```
 
 # chapman
 
 <!-- badges: start -->
+
 <!-- badges: end -->
 
-The goal of chapman is to ... nothing yet.
+The goal of chapman is to … nothing yet.
 
-Don't believe anything written below!
+Don’t believe anything written below\!
 
 ## Installation
 
-You can install the released version of chapman from [CRAN](https://CRAN.R-project.org) with:
+You can install the released version of chapman from
+[CRAN](https://CRAN.R-project.org) with:
 
 ``` r
 install.packages("chapman")
@@ -37,14 +26,16 @@ And the development version from [GitHub](https://github.com/) with:
 # install.packages("devtools")
 devtools::install_github("gordanz/chapman")
 ```
+
 ## Example
 
 This is a basic example which shows you how to solve a common problem:
 
-```{r example, fig.width=6, fig.heigth=3}
+``` r
 library(chapman)
 ## basic example code
 m = tennis()
 plot(m, vertex.size=40)
 ```
 
+<img src="man/figures/README-example-1.png" width="100%" />

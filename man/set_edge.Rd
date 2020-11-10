@@ -7,6 +7,8 @@
 set_edge(m, from, to, ...)
 }
 \arguments{
+\item{m}{a markov_chain object}
+
 \item{from}{if integer index, otherwise state label}
 
 \item{to}{if integer index, otherwise state label}
@@ -18,10 +20,4 @@ markov_chain
 }
 \description{
 Sets edge properties
-}
-\examples{
-m = markov_chain(2)
-m = add_edge(m,1,2,prob=0.2)
-m = set_edge_(m,1,2, prob=0.3)
-print(m$edges)
 }

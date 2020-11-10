@@ -7,10 +7,9 @@
 \method{plot}{markov_chain}(x, ...)
 }
 \arguments{
-\item{m}{}
-}
-\value{
+\item{x}{the markov_chain object to be plotted}
 
+\item{...}{additional graphics parameters}
 }
 \description{
 Plot method for a markov_chain object

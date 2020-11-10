@@ -6,7 +6,7 @@
 #' @param alpha angle
 #' @param pca whether to set angle using principal components
 #'
-#' @return
+#' @return a markov_chain object
 #' @export
 rotate <- function(m, alpha, pca = FALSE) {
 
@@ -24,18 +24,15 @@ rotate <- function(m, alpha, pca = FALSE) {
   }
   m$layout = m$layout %*% rot_mat
   return(m)
-
 }
 
 #' Scales the layout to mean=0, var=1
 #'
-#' @param m
+#' @param m a markov_chain object
 #' @param ... additional arguments to builtin "scale"
 #'
-#' @return
+#' @return a markov_chain object
 #' @export
-#'
-#' @examples
 autoscale <- function(m, ...) {
   m$layout = scale(m$layout,...)
   return(m)
@@ -43,14 +40,12 @@ autoscale <- function(m, ...) {
 
 #' Stretch (scale) the layout of a markov_chain
 #'
-#' @param m
+#' @param m a markov_chain object
 #' @param ax stretch factor in x
 #' @param ay stretch factor in y
 #'
-#' @return
+#' @return a markov_chain object
 #' @export
-#'
-#' @examples
 stretch <- function(m, ax,ay=ax){
   m$layout = m$layout %*%
     matrix(c(ax,0,0,ay),nrow=2)
@@ -59,11 +54,11 @@ stretch <- function(m, ax,ay=ax){
 
 #' Shift the layout of a markov_chain
 #'
-#' @param m
+#' @param m a markov_chain object
 #' @param ax shift amount in x
 #' @param ay shift amount in y
 #'
-#' @return
+#' @return a markov_chain object
 #' @export
 shift <- function(m, ax,ay=0){
   m$layout = m$layout +
@@ -73,12 +68,11 @@ shift <- function(m, ax,ay=0){
 
 #' Sets an automatic layout using the specified algorithm
 #'
-#' @param m
+#' @param m a markov_chain object
 #' @param algorithm an igraph layout algorithm
 #'
-#' @return
+#' @return a markov_chain object
 #' @export
-
 set_auto_layout = function(m, algorithm = default$layout.algorithm) {
   g = igraph::graph_from_data_frame(m$edges, directed = TRUE, vertices = m$states)
   m$layout = scale(algorithm(g))
@@ -88,15 +82,11 @@ set_auto_layout = function(m, algorithm = default$layout.algorithm) {
 # Other functions -----------------
 #' Make overlapping edges avoid each other
 #'
-#' @param m
+#' @param m a markov_chain object
 #' @param curve the curvature
 #'
-#' @return
+#' @return a markov_chain object
 #' @export
-#'
-#' @examples
-#' P = matrix( rep(1/3,9), ncol=3)
-#' m = new_markov_chain_from_matrix(P)
 curve_overlapping_edges = function(m, curve = default$edge.curve) {
   if (nedges(m) == 0) return(m)
 

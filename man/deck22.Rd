@@ -7,7 +7,7 @@
 deck22()
 }
 \value{
-
+a markov_chain object
 }
 \description{
 Chain from the problem "deck22"

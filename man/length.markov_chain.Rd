@@ -15,7 +15,3 @@ integer
 \description{
 Returns the number of states
 }
-\examples{
-m = new_markov_chain(c("a","b","c"))
-print(length(m))
-}

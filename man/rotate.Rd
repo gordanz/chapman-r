@@ -14,7 +14,7 @@ rotate(m, alpha, pca = FALSE)
 \item{pca}{whether to set angle using principal components}
 }
 \value{
-
+a markov_chain object
 }
 \description{
 Rotate the layout of a markov_chain

@@ -4,7 +4,8 @@
 #'
 #' @param m a markov_chain object
 #' @export
-summary.markov_chain <- function(m) {
+summary.markov_chain <- function(object, ...) {
+  m = object
   print(output_states(m))
   print(output_edges(m))
 }
@@ -13,7 +14,8 @@ summary.markov_chain <- function(m) {
 #'
 #' @param m a markov_chain object
 #' @export
-print.markov_chain <- function(m) {
+print.markov_chain <- function(x, ...) {
+  m=x
   print(output_states(m))
   print(output_edges(m))
 }

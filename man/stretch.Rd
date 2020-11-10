@@ -7,12 +7,14 @@
 stretch(m, ax, ay = ax)
 }
 \arguments{
+\item{m}{a markov_chain object}
+
 \item{ax}{stretch factor in x}
 
 \item{ay}{stretch factor in y}
 }
 \value{
-
+a markov_chain object
 }
 \description{
 Stretch (scale) the layout of a markov_chain

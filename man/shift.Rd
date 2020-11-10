@@ -7,12 +7,14 @@
 shift(m, ax, ay = 0)
 }
 \arguments{
+\item{m}{a markov_chain object}
+
 \item{ax}{shift amount in x}
 
 \item{ay}{shift amount in y}
 }
 \value{
-
+a markov_chain object
 }
 \description{
 Shift the layout of a markov_chain

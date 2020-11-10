@@ -12,7 +12,7 @@ gamblers_ruin(a = 5, p = 0.25)
 \item{p}{probability of winning 1 $}
 }
 \value{
-
+a markov_chain object
 }
 \description{
 Gambler's ruin markov chain

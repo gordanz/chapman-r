@@ -16,7 +16,7 @@ attached_cycles(n1 = 4, n2 = 6, pA = 0.4, tail = FALSE)
 \item{tail}{whether there is a short tail}
 }
 \value{
-mc
+a markov_chain object
 }
 \description{
 Markov chain with two attached cycles

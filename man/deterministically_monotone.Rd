@@ -6,8 +6,11 @@
 \usage{
 deterministically_monotone(T = 6)
 }
+\arguments{
+\item{T}{the position of the state cut-off ("...")}
+}
 \value{
-
+a markov_chain object
 }
 \description{
 Deterministically monotone markov chain

@@ -2,9 +2,21 @@
 
 #' Construct a markov_chain object
 #'
-#' @param x The object from which the chain is to be constructed. Can be a single integer, a vector, a matrix or a data frame.
+#' @param x The object from which the chain is to be constructed.
+#' Can be missing, a single integer, a vector, a matrix or a data frame.
+#' If x is:
+#' - missing; an empty markov chain is produced.
+#' - an integer; the produced chain will have $x$ states labeled
+#' 1,2,...,x with no edges
+#' - a vector; the elements of x will be cast into strings to serve
+#' as labels of the output chain. No edges.
+#' - a matrix; x will be the transition matrix of a chain. States
+#' will be labels 1,2,...,n, where n is the number of rows/columns of x.
+#' - a data frame; it needs to have string columns "to" and "from" and a numeric column "prob". It can also have
+#' other columns (like color or loop_angle) for additional properties.
+#' Each row will become an edge from "from" to "to" with probability "prob".
 #'
-#' @return
+#' @return a markov_chain object
 #' @export
 #'
 markov_chain <- function(x=0, ...) {
@@ -105,26 +117,20 @@ markov_chain_data_frame = function(d, ...)
   states = sort(unique(c(d$to, d$from)))
   m = markov_chain_vector(states)
   for (i in 1:nrow(d)) {
-    m = do.call(add_edge_by_labels, c(list(m), d[i,]))
+    m = do.call(add_edge, c(list(m), d[i,]))
   }
   return(m)
 }
 
 
 
-#' Builds a mc with random transitions
+#' Builds a markov chain with random transitions
 #'
 #' @param n number of states
 #' @param p a parameter governing the total number of edges
 #'
-#'
-#'
-#' @return
+#' @return a markov_chain object
 #' @export
-#'
-#' @examples
-#' m = random_mc(3, p = 0.4)
-#' print(transition_matrix(m))
 markov_chain_random <- function(n, p = 0.5) {
   P = t(replicate(n, random_row(n, p)))
   m = P %>%
@@ -139,8 +145,8 @@ markov_chain_random <- function(n, p = 0.5) {
 
 
 random_row <- function(n, p) {
-  num = rbinom(1, n - 1, p) + 1
-  non_zeros = runif(num) %>%
+  num = stats::rbinom(1, n - 1, p) + 1
+  non_zeros = stats::runif(num) %>%
     scale(center = F)
   row = c(non_zeros, rep(0, n - num)) %>%
     sample

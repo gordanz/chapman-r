@@ -7,10 +7,24 @@
 markov_chain(x = 0, ...)
 }
 \arguments{
-\item{x}{The object from which the chain is to be constructed. Can be a single integer, a vector, a matrix or a data frame.}
+\item{x}{The object from which the chain is to be constructed.
+Can be missing, a single integer, a vector, a matrix or a data frame.
+If x is:
+\itemize{
+\item missing; an empty markov chain is produced.
+\item an integer; the produced chain will have $x$ states labeled
+1,2,...,x with no edges
+\item a vector; the elements of x will be cast into strings to serve
+as labels of the output chain. No edges.
+\item a matrix; x will be the transition matrix of a chain. States
+will be labels 1,2,...,n, where n is the number of rows/columns of x.
+\item a data frame; it needs to have string columns "to" and "from" and a numeric column "prob". It can also have
+other columns (like color or loop_angle) for additional properties.
+Each row will become an edge from "from" to "to" with probability "prob".
+}}
 }
 \value{
-
+a markov_chain object
 }
 \description{
 Construct a markov_chain object

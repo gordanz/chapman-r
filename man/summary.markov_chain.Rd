@@ -4,7 +4,7 @@
 \alias{summary.markov_chain}
 \title{The summary method for the markov_chain class}
 \usage{
-\method{summary}{markov_chain}(m)
+\method{summary}{markov_chain}(object, ...)
 }
 \arguments{
 \item{m}{a markov_chain object}

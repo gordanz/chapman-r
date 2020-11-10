@@ -7,20 +7,14 @@
 set_auto_edge_colors(m, discrete = T, nbins = 3, ...)
 }
 \arguments{
+\item{m}{a markov_chain object}
+
 \item{discrete}{logical, distinguishable vs. in order}
 
 \item{nbins}{if discrete, how many categories}
 
-\item{...}{}
-}
-\value{
-
+\item{...}{additional arguments (palette)}
 }
 \description{
 Colors edges according to their probabilities
-}
-\examples{
-m = color_tester_markov_chain(15)
-m = set_fancy_edge_colors(m)
-plot(m)
 }

@@ -4,7 +4,7 @@
 \alias{print.markov_chain}
 \title{The print method for the markov_chain class. For now the same as summary.}
 \usage{
-\method{print}{markov_chain}(m)
+\method{print}{markov_chain}(x, ...)
 }
 \arguments{
 \item{m}{a markov_chain object}
