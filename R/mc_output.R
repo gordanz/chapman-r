@@ -7,7 +7,7 @@
 #'
 #' @export
 set_graphics_parameters = function(m, ...) {
-  m$graphics_parameters = c(m$graphics_parameters, ...)
+  m$graphics_parameters = utils::modifyList(m$graphics_parameters, list(...))
   return(m)
 }
 
@@ -130,15 +130,15 @@ plot.markov_chain <- function(x, ... ) {
     ylim = c(y_range[1], y_range[2])
   )
 
-  arguments=c(
-    list(x=g),
-    from_function_call,
-    from_graphics_parameters,
-    from_here_lim,
-    from_here)
+  arg = list(x=g) %>%
+    utils::modifyList(from_here) %>%
+    utils::modifyList(from_here_lim) %>%
+    utils::modifyList(from_graphics_parameters) %>%
+    utils::modifyList(from_function_call)
+
   igraph::igraph_options(verbose = TRUE)
 
-  do.call(igraph::plot.igraph, args=arguments)
+  do.call(igraph::plot.igraph, args=arg)
 }
 
 
