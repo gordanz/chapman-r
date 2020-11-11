@@ -64,6 +64,13 @@ set_auto_edge_colors = function (m, discrete = T, nbins = 3, ...) {
 
 }
 
+#' Colors all absorbing states
+#'
+#' @param m a markov_chain object
+#' @param color a color
+#'
+#' @return a markov_chain object
+#' @export
 set_absorbing_state_color <- function(m,
               color = default$absorbing.state.color) {
 

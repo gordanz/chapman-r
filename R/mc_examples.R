@@ -239,40 +239,63 @@ regime_switching = function(p12 = 0.4, p21 = 0.7) {
 #' @return a markov_chain object
 #' @export
 #'
-professor <- function(p_morning=0.05, p_afternoon = 0.20) {
+professor <- function( p_h=0.05, p_o = 0.20) {
 
   # constants
-  q_morning = 1-p_morning
-  q_afternoon = 1-p_afternoon
-  p_morning_label = "p_m"
-  q_morning_label = "q_m"
-  p_afternoon_label = "p_a"
-  q_afternoon_label = "q_a"
+  q_h = 1-p_h
+  q_o = 1-p_o
+  p_h_label = paste(p_h)
+  q_h_label = paste(1-p_h)
+  p_o_label = paste(p_o)
+  q_o_label = paste(1-p_o)
 
   # states
   m = markov_chain() %>%
-    add_state("0,5,H", x = -5, y = -1) %>%
-    add_state("1,4,H", x = -3, y = -1) %>%
-    add_state("2,3,H", x = -1, y = -1) %>%
-    add_state("3,2,H", x =  1, y = -1) %>%
-    add_state("4,1,H", x =  3, y = -1) %>%
-    add_state("5,0,H", x =  5, y = -1) %>%
-    add_state("0,5,W", x = -5, y = 1) %>%
-    add_state("1,4,W", x = -3, y = 1) %>%
-    add_state("2,3,W", x = -1, y = 1) %>%
-    add_state("3,2,W", x =  1, y = 1) %>%
-    add_state("4,1,W", x =  3, y = 1) %>%
-    add_state("5,0,W", x =  5, y = 1) %>%
+    add_state("h0-4", x = -5, y = -1) %>%
+    add_state("h1-3", x = -3, y = -1) %>%
+    add_state("h2-2", x = -1, y = -1) %>%
+    add_state("h3-1", x =  1, y = -1) %>%
+    add_state("h4-0", x =  3, y = -1) %>%
+    add_state("0-4o", x =  5, y = 1) %>%
+    add_state("1-3o", x =  3, y = 1) %>%
+    add_state("2-2o", x =  1, y = 1) %>%
+    add_state("3-1o", x = -1, y = 1) %>%
+    add_state("4-0o", x = -3, y = 1) %>%
     add_state("Wet",   x = -6, y = 0)
 
   m = m %>%
-    add_edge("0,5,H", "Wet", p_morning)
+    add_edge("h0-4", "Wet", p_h) %>%
+    add_edge("h0-4", "0-4o", q_h) %>%
+    add_edge("h1-3", "0-4o", p_h) %>%
+    add_edge("h1-3", "1-3o", q_h) %>%
+    add_edge("h2-2", "1-3o", p_h) %>%
+    add_edge("h2-2", "2-2o", q_h) %>%
+    add_edge("h3-1", "2-2o", p_h) %>%
+    add_edge("h3-1", "3-1o", q_h) %>%
+    add_edge("h4-0", "3-1o", p_h) %>%
+    add_edge("h4-0", "4-0o", q_h) %>%
+    add_edge("0-4o", "h0-4", q_o) %>%
+    add_edge("0-4o", "h1-3", p_o) %>%
+    add_edge("1-3o", "h1-3", q_o) %>%
+    add_edge("1-3o", "h2-2", p_o) %>%
+    add_edge("2-2o", "h2-2", q_o) %>%
+    add_edge("2-2o", "h3-1", p_o) %>%
+    add_edge("3-1o", "h3-1", q_o) %>%
+    add_edge("3-1o", "h4-0", p_o) %>%
+    add_edge("4-0o", "h4-0", q_o) %>%
+    add_edge("4-0o", "Wet", p_o) %>%
+    add_edge("Wet","Wet", loop_angle = pi/4)
 
-  m$layout = m$layout %>%
-    stretch(0.5,0.5) %>%
+
+
+
+  m = m %>%
+    set_auto_layout %>%
+    set_auto_edge_colors(nbin=4) %>%
+    curve_overlapping_edges %>%
     set_graphics_parameters(
-    vertex.size = 35
-  )
+      vertex.shape = "rectangle"
+      )
 
   return(m)
 }
