@@ -1,4 +1,4 @@
----
+:w---
 output: github_document
 always_allow_html: true
 ---
@@ -41,10 +41,9 @@ devtools::install_github("gordanz/chapman")
 
 This is a basic example which shows you how to solve a common problem:
 
-```{r example, fig.width=6, fig.heigth=3}
+```{r example}
 library(chapman)
 ## basic example code
-m = tennis()
-plot(m, vertex.size=40)
+univariate_table(c(1,2,3), c(0.1,0.2,0.7))
 ```
 
