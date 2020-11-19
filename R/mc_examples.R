@@ -239,7 +239,7 @@ regime_switching = function(p12 = 0.4, p21 = 0.7) {
 #' @return a markov_chain object
 #' @export
 #'
-professor <- function( p_h=0.05, p_o = 0.20) {
+professor <- function( p_h=0.05, p_o = 0.20, split_wet=FALSE) {
 
   # constants
   q_h = 1-p_h
@@ -251,20 +251,27 @@ professor <- function( p_h=0.05, p_o = 0.20) {
 
   # states
   m = markov_chain() %>%
-    add_state("h0-4", x = -5, y = -1) %>%
-    add_state("h1-3", x = -3, y = -1) %>%
-    add_state("h2-2", x = -1, y = -1) %>%
-    add_state("h3-1", x =  1, y = -1) %>%
-    add_state("h4-0", x =  3, y = -1) %>%
-    add_state("0-4o", x =  5, y = 1) %>%
-    add_state("1-3o", x =  3, y = 1) %>%
-    add_state("2-2o", x =  1, y = 1) %>%
-    add_state("3-1o", x = -1, y = 1) %>%
-    add_state("4-0o", x = -3, y = 1) %>%
-    add_state("Wet",   x = -6, y = 0)
+    add_state("h0-4") %>%
+    add_state("h1-3") %>%
+    add_state("h2-2") %>%
+    add_state("h3-1") %>%
+    add_state("h4-0") %>%
+    add_state("0-4o") %>%
+    add_state("1-3o") %>%
+    add_state("2-2o") %>%
+    add_state("3-1o") %>%
+    add_state("4-0o")
+  if (split_wet) {
+    m = m %>%
+      add_state("Wet-o") %>%
+      add_state("Wet-h")
+  } else {
+    m = m %>%
+      add_state("Wet")
+  }
+
 
   m = m %>%
-    add_edge("h0-4", "Wet", p_h) %>%
     add_edge("h0-4", "0-4o", q_h) %>%
     add_edge("h1-3", "0-4o", p_h) %>%
     add_edge("h1-3", "1-3o", q_h) %>%
@@ -282,20 +289,33 @@ professor <- function( p_h=0.05, p_o = 0.20) {
     add_edge("2-2o", "h3-1", p_o) %>%
     add_edge("3-1o", "h3-1", q_o) %>%
     add_edge("3-1o", "h4-0", p_o) %>%
-    add_edge("4-0o", "h4-0", q_o) %>%
-    add_edge("4-0o", "Wet", p_o) %>%
-    add_edge("Wet","Wet", loop_angle = pi/4)
+    add_edge("4-0o", "h4-0", q_o)
+
+  if (split_wet) {
+    m = m %>%
+      add_edge("h0-4", "Wet-h", p_h) %>%
+      add_edge("4-0o", "Wet-o", p_o) %>%
+      add_edge("Wet-h","Wet-h", loop_angle = pi/4) %>%
+      add_edge("Wet-o","Wet-o", loop_angle = pi/4)
+  } else {
+    m = m %>%
+      add_edge("h0-4", "Wet", p_h) %>%
+      add_edge("4-0o", "Wet", p_o) %>%
+      add_edge("Wet","Wet", loop_angle = pi/4)
+  }
 
 
 
 
   m = m %>%
     set_auto_layout %>%
+    rotate(pca=TRUE) %>%
     set_auto_edge_colors(nbin=4) %>%
     curve_overlapping_edges %>%
     set_graphics_parameters(
       vertex.shape = "rectangle"
       )
+
 
   return(m)
 }
@@ -417,3 +437,53 @@ deck22 = function() {
     rotate(pi/3)
   return(m)
 }
+
+#' A Markov chain that tracks the pattern HTH
+#' in a series of coin tosses
+#'
+#' @return a markov_chain object
+#' @export
+pattern_HTH = function() {
+  m = markov_chain() %>%
+    add_state("0",x=0, y=0) %>%
+    add_state("H",x=1, y=0) %>%
+    add_state("HT",x=2, y=0) %>%
+    add_state("HTH",x=3, y=0) %>%
+    add_edge("0","0",1/2, loop_angle=-pi/2) %>%
+    add_edge("0","H",1/2) %>%
+    add_edge("H","H",1/2, loop_angle=-pi/2) %>%
+    add_edge("H","HT",1/2) %>%
+    add_edge("HT","0",1/2, curve = 0.6) %>%
+    add_edge("HT","HTH",1/2) %>%
+    add_edge("HTH","HTH",1, loop_angle=-pi/2) %>%
+    curve_overlapping_edges(0.5) %>%
+    set_absorbing_state_color %>%
+    set_auto_edge_colors
+  return(m)
+}
+
+#' A Markov chain that tracks the pattern HHH
+#' in a series of coin tosses
+#'
+#' @return a markov_chain object
+#' @export
+pattern_HHH = function() {
+  m = markov_chain() %>%
+    add_state("0",x=0, y=0) %>%
+    add_state("H",x=1, y=0) %>%
+    add_state("HH",x=2, y=0) %>%
+    add_state("HHH",x=3, y=0) %>%
+    add_edge("0","0",1/2, loop_angle=-pi/2) %>%
+    add_edge("0","H", 1/2) %>%
+    add_edge("H","0", 1/2) %>%
+    add_edge("H","HH", 1/2) %>%
+    add_edge("HH","0", 1/2, curve = 0.6) %>%
+    add_edge("HH","HHH", 1/2) %>%
+    add_edge("HHH","HHH",1, loop_angle=-pi/2) %>%
+    set_absorbing_state_color %>%
+    curve_overlapping_edges(-0.3) %>%
+    set_auto_edge_colors
+  return(m)
+}
+
+
