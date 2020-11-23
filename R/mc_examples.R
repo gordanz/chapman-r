@@ -486,4 +486,29 @@ pattern_HHH = function() {
   return(m)
 }
 
+#' Markov chain for the problem with computers breaking down
+#'
+#' @param p the break-down probability
+#'
+#' @return a markov_chain object
+#' @export
+facility = function(p=0.4) {
+  markov_chain() %>%
+    add_state("0-0-1-1", x=0, y=0) %>%
+    add_state("2-0-0-0", x=1, y=0) %>%
+    add_state("1-1-0-0", x=1.5, y=0.5) %>%
+    add_state("0-1-0-1", x=0, y=1) %>%
+    add_state("1-0-1-0", x=1, y=1) %>%
+    add_edge("0-0-1-1","0-1-0-1", label="") %>%
+    add_edge("2-0-0-0","0-0-1-1", label="p^2", prob = p**2) %>%
+    add_edge("2-0-0-0","2-0-0-0", label="(1-p)^2", prob = (1-p)**2) %>%
+    add_edge("2-0-0-0","1-0-1-0",label="2p(1-p)", prob = 2* p*(1-p)) %>%
+    add_edge("1-1-0-0","2-0-0-0", label="1-p", prob = (1-p)) %>%
+    add_edge("1-1-0-0","1-0-1-0",label="p", prob = p) %>%
+    add_edge("1-0-1-0","1-1-0-0",label="1-p", prob = (1-p)) %>%
+    add_edge("1-0-1-0","0-1-0-1",label="p", prob = p) %>%
+    add_edge("0-1-0-1","1-0-1-0", label="", prob = 1) %>%
+    curve_overlapping_edges(0.3)
+  }
+
 

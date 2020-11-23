@@ -36,7 +36,7 @@ markov_chain <- function(x=0, ...) {
       return(markov_chain_vector(x, ...))
     } else {
       if (x==0)
-        return(markov_chain_empty(...))
+        return(markov_chain_empty())
       else
         return(markov_chain_integer(x, ...))
     }
@@ -45,7 +45,7 @@ markov_chain <- function(x=0, ...) {
 }
 
 
-markov_chain_empty <- function(...) {
+markov_chain_empty <- function() {
   value <- list(
     edges = tibble::tibble(
       from = integer(0),
@@ -73,9 +73,9 @@ markov_chain_empty <- function(...) {
 }
 
 markov_chain_integer <- function(n, ...) {
-  m <- markov_chain_empty(...)
+  m <- markov_chain_empty()
   if (n >= 1) {
-      m = m %>% add_state(n)
+      m = m %>% add_state(n, ...)
   } else {
     stop("number_of_states need to be a positive integer")
   }
@@ -84,8 +84,8 @@ markov_chain_integer <- function(n, ...) {
 
 markov_chain_vector <- function(x, ...){
   x = as.character(x)
-  m <- markov_chain_empty(...) %>%
-    add_state(x)
+  m <- markov_chain_empty() %>%
+    add_state(x, ...)
   return(m)
 }
 
@@ -115,7 +115,7 @@ markov_chain_data_frame = function(d, ...)
   d$from = as.character(d$from)
 
   states = sort(unique(c(d$to, d$from)))
-  m = markov_chain_vector(states)
+  m = markov_chain_vector(states, ...)
   for (i in 1:nrow(d)) {
     m = do.call(add_edge, c(list(m), d[i,]))
   }
