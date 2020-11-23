@@ -74,7 +74,7 @@ shift <- function(m, ax,ay=0){
 #' @return a markov_chain object
 #' @export
 set_auto_layout = function(m, algorithm = default$layout.algorithm) {
-  g = igraph::graph_from_data_frame(m$edges, directed = TRUE, vertices = m$states)
+  g = graph_of(m)
   m$layout = scale(algorithm(g))
   return(m)
 }

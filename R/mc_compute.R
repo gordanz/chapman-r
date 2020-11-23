@@ -21,23 +21,36 @@ transition_matrix <- function(m) {
   return(P)
 }
 
+#' Classifies states of the chain
+#'
+#' @param m a markov_chain object
+#'
+#' @return a markov_chain object
+#' @export
 classify = function(m) {
-  g = igraph::graph_from_data_frame(m$edges,
-                                    directed = TRUE,
-                                    vertices = m$states)
+
+  g = graph_of(m)
+  print("Made it through graph_of")
 
   comps = igraph::components(g, mode="strong")
-  m$states = m$states %>%
-    add_column(class = comps$membership,
-               recurrent = TRUE)
+  print("Made it through igraph::components")
+
+  if (! "class" %in% colnames(m$states)){
+    m$states = m$states %>%
+      add_column(class = comps$membership)
+  }
+
+  if (! "recurrent" %in% colnames(m$states)){
+    m$states = m$states %>%
+      add_column(recurrent = TRUE)
+  }
+
   class_rec = rep(TRUE, comps$no)
 
   for (k in 1:nedges(m)) {
     i = m$edges$from[k]
     j = m$edges$to[k]
     if ( m$states$class[i] != m$states$class[j] ) {
-      print(paste(i," -> ", j))
-      print(m$states$class[i])
       class_rec[m$states$class[i]] = FALSE
     }
   }
@@ -46,6 +59,16 @@ classify = function(m) {
   }
 
   return(m)
+}
+
+#' Check whether the states of the chain have already been classified
+#'
+#' @param m
+#'
+#' @return logical
+#' @export
+is_classified = function(m) {
+  return("class" %in% colnames(m$states))
 }
 
 

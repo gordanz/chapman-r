@@ -10,6 +10,8 @@ default = list(
   vertex.size = 25,
   vertex.label.cex = 1,
   absorbing.state.color = "orange",
+  recurrent.color = "orange",
+  transient.color = "lightblue",
   # edges
   edge.arrow.size = 0.4,
   edge.color = "gray",
@@ -20,5 +22,6 @@ default = list(
   # other
   continuous.edge.palette = colorRampPalette(c("yellow", "darkorange4")),
   discrete.edge.palette = function(n) RColorBrewer::brewer.pal(max(n,3), "Set2"),
+  class.palette = randomcoloR::randomColor,
   layout.algorithm = igraph::layout_with_kk
 )

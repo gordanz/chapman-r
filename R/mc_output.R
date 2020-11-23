@@ -64,6 +64,65 @@ set_auto_edge_colors = function (m, discrete = T, nbins = 3, ...) {
 
 }
 
+#' Colors states according to their classes
+#'
+#' @param m a markov_chain object
+#' @param by_recurrence logical
+#' @param by_class logical
+#' @param ... additional arguments (palette)
+#'
+#' @export
+set_auto_state_colors = function (m, by_recurrence = T, by_class=F, ...){
+  if (!is_classified(m))
+    m = m %>% classify
+
+# load_all(); m = tennis(); m = set_auto_state_colors(m); plot(m)
+  nclasses = max(m$states$class)
+
+  if (missing(by_class)){
+    by_class = !by_recurrence
+  } else {
+    by_recurrence = !by_class
+  }
+  if (by_recurrence) {
+    # palette settings
+    args = list(...)
+
+    transient_color = default$transient.color
+
+    if ("recurrent" %in% names(args)) {
+      recurrent_color = args$recurrent
+    } else {
+      recurrent_color = default$recurrent.color
+    }
+
+    if ("transient" %in% names(args)) {
+      transient_color = args$transient
+    } else {
+      transient_color = default$transient.color
+    }
+
+    m$states =
+      m$states %>%
+      dplyr::mutate(color = ifelse(recurrent == TRUE,
+                                   recurrent_color, transient_color))
+  } else { # by class
+    # palette settings
+    args = list(...)
+    if ("palette" %in% names(args)) {
+      the_palette_vector = args$palette(nclasses)
+    } else {
+      the_palette_vector = default$class.palette(nclasses)
+    }
+    # set colors
+    m$states =
+      m$states %>%
+      dplyr::mutate(color = the_palette_vector[class])
+  }
+
+  return(m)
+}
+
 #' Colors all absorbing states
 #'
 #' @param m a markov_chain object

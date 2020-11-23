@@ -184,5 +184,11 @@ set_edge= function(m, from, to, ...) {
   return(m)
 }
 
+graph_of = function(m) {
+  return(igraph::graph_from_data_frame(m$edges,
+                                       directed = TRUE,
+                                       vertices = m$states))
+}
+
 
 
