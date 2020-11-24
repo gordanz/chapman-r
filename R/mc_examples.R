@@ -573,7 +573,9 @@ pattern = function (pattern_string, p=1/2) {
   m = m %>%
     set_auto_layout(algorithm = igraph::layout_in_circle) %>%
     set_auto_edge_colors() %>%
-    set_auto_state_colors()
+    set_auto_state_colors() %>%
+    set_graphics_parameters(vertex.size = 20+10*(n-1), vertex.label.cex=0.8)
+
 
   return(m)
 

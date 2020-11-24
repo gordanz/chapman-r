@@ -75,7 +75,7 @@ set_auto_edge_colors = function (m, discrete = T, nbins = 3, ...) {
 set_auto_state_colors = function (m, by_recurrence = T, by_class=F, ...){
   if (!is_classified(m))
     m = m %>% classify
-  print("classified")
+
 
 # load_all(); m = tennis(); m = set_auto_state_colors(m); plot(m)
   nclasses = max(m$states$class)
@@ -181,7 +181,7 @@ plot.markov_chain <- function(x, ... ) {
                                     directed = TRUE,
                                     vertices = m$states)
   #limits
-  mrg = 0.08
+  mrg = 0.12
   x_range = range(m$layout[,1])
   dx = x_range[2]-x_range[1]
   x_range[2] = x_range[2] + mrg* dx

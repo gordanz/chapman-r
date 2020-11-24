@@ -21,8 +21,6 @@ transition_matrix <- function(m) {
   return(P)
 }
 
-<<<<<<< HEAD
-=======
 #' Classifies states of the chain
 #'
 #' @param m a markov_chain object
@@ -80,7 +78,6 @@ classify = function(m) {
 
   return(m)
 }
->>>>>>> 7232aaa827b882301ad831667f3a59c5c44e2fdc
 
 #' Check whether the states of the chain have already been classified
 #'
@@ -92,5 +89,33 @@ is_classified = function(m) {
   return("class" %in% colnames(m$states))
 }
 
+#' Returns the vector of transient states
+#'
+#' @param m a markov_chain object
+#'
+#' @return vector is indices
+#' @export
+transient_states = function(m) {
+  if (!is_classified(m)) {
+    m = classify(m)
+  }
+  return(m$states$index[m$states$recurrent == FALSE])
+}
 
-# load_all(); m = deck22(); g = graph_from_data_frame(m$edges, directed=T, vertices=m$states)
+#' Returns the vector of transient states
+#'
+#' @param m a markov_chain object
+#'
+#' @return vector is indices
+#' @export
+
+recurrent_states = function(m) {
+  if (!is_classified(m)) {
+    m = classify(m)
+  }
+  return(m$states$index[m$states$recurrent == TRUE])
+}
+
+
+
+
