@@ -541,6 +541,13 @@ largest_first = function(test, pattern) {
   return(test)
 }
 
+#' A pattern-waiting markov chain for an arbitrary pattern
+#'
+#' @param pattern_string a string of "H" and "T"
+#' @param p probability of "H"
+#'
+#' @return a markov_chain object
+#' @export
 pattern = function (pattern_string, p=1/2) {
   if (pattern_string == "") {
     stop("Need a nonempty string.")

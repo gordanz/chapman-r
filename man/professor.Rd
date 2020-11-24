@@ -4,7 +4,7 @@
 \alias{professor}
 \title{A Markov Chain for the problem with the professor and umbrellas}
 \usage{
-professor(p_h = 0.05, p_o = 0.2)
+professor(p_h = 0.05, p_o = 0.2, split_wet = FALSE)
 }
 \arguments{
 \item{p_morning}{probability of getting wet in the morning}
