@@ -29,15 +29,33 @@ transition_matrix <- function(m) {
 #' @export
 classify = function(m) {
 
-  g = graph_of(m)
-  print("Made it through graph_of")
+  P = sign(transition_matrix(m))
+  n = length(m)
+  S = diag(n)*0
+  Q = diag(n)
+  for (i in 1:n) {
+    S = sign(S + Q)
+    Q = sign(Q %*% P)
+  }
+  rel = (S+t(S)) == 2
 
-  comps = igraph::components(g, mode="strong")
-  print("Made it through igraph::components")
+  class_of = rep(0,n)
+  cl = 0
+  for (i in 1:n) {
+    if (class_of[i] == 0) {
+      cl = cl + 1
+      class_of[i]=cl
+      for (j in i:n) {
+        if (rel[i,j]) {
+          class_of[j] = cl
+        }
+      }
+    }
+  }
 
   if (! "class" %in% colnames(m$states)){
     m$states = m$states %>%
-      add_column(class = comps$membership)
+      add_column(class = class_of)
   }
 
   if (! "recurrent" %in% colnames(m$states)){
@@ -45,7 +63,7 @@ classify = function(m) {
       add_column(recurrent = TRUE)
   }
 
-  class_rec = rep(TRUE, comps$no)
+  class_rec = rep(TRUE, cl)
 
   for (k in 1:nedges(m)) {
     i = m$edges$from[k]
