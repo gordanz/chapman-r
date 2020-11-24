@@ -511,4 +511,71 @@ facility = function(p=0.4) {
     curve_overlapping_edges(0.3)
   }
 
+stov = function(s) {
+  if (s == "0") {
+    return(character(0))
+    } else {
+      return(unlist(strsplit(s,"")))
+    }
+}
+vtos = function(v) {
+  if (length(v) == 0) {
+    return("0")
+    } else {
+      return(paste(v, collapse = ""))
+    }
+}
+
+is_prefix = function(test, pattern) {
+  all( test == pattern[1:length(test)])
+}
+
+largest_first = function(test, pattern) {
+  while (length(test) > 0) {
+    if (is_prefix(test, pattern)){
+      return(test)
+      } else {
+        test = test[-1]
+      }
+  }
+  return(test)
+}
+
+pattern = function (pattern_string, p=1/2) {
+  if (pattern_string == "") {
+    stop("Need a nonempty string.")
+  }
+  pat = stov(pattern_string)
+  if (any( ! pat %in% c("H","T"))) {
+    stop("Nees a string of Hs and Ts only")
+  }
+  n = length(pat)
+  m = markov_chain() %>%
+    add_state("0", x=0, y=0)
+
+  for (i in 1:n){
+    m = add_state(m, vtos(pat[1:i]), x=i, y=0 )
+  }
+
+  for (i in 1:n) {
+    pat_now = stov( m$states$label[i] )
+    pat_now_H = c(pat_now,"H")
+    pat_now_T = c(pat_now, "T")
+    next_H = vtos(largest_first(pat_now_H, pat))
+    next_T = vtos(largest_first(pat_now_T, pat))
+    m = m %>%
+      add_edge(i, next_H, prob = p, loop_angle=-pi/2) %>%
+      add_edge(i, next_T, prob = 1-p, loop_angle = -pi/2)
+  }
+  m = m %>%
+    add_edge(n+1,n+1,prob=1, loop_angle = -pi/2)
+
+  m = m %>%
+    set_auto_layout(algorithm = igraph::layout_in_circle) %>%
+    set_auto_edge_colors() %>%
+    set_auto_state_colors()
+
+  return(m)
+
+}
 
