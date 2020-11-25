@@ -57,7 +57,7 @@ markov_chain_empty <- function() {
       loop_angle = double(0)
     ),
     states = tibble::tibble(
-      index = integer(0),
+      id = integer(0),
       label = character(0),
       x = double(0),
       y = double(0),

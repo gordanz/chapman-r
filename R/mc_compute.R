@@ -99,7 +99,7 @@ transient_states = function(m) {
   if (!is_classified(m)) {
     m = classify(m)
   }
-  return(m$states$index[m$states$recurrent == FALSE])
+  return(m$states$id[m$states$recurrent == FALSE])
 }
 
 #' Returns the vector of transient states
@@ -113,7 +113,7 @@ recurrent_states = function(m) {
   if (!is_classified(m)) {
     m = classify(m)
   }
-  return(m$states$index[m$states$recurrent == TRUE])
+  return(m$states$id[m$states$recurrent == TRUE])
 }
 
 

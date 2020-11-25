@@ -67,7 +67,7 @@ single_bridge = function(T, k, nozero = FALSE) {
 #' @export
 all_paths = function (T, nozero = FALSE) {
   Omega = list(2 ^ T)
-  index = 1
+  id = 1
 
   for (i in 0:T) {
     choices = utils::combn(T, i, simplify = FALSE)
@@ -75,11 +75,11 @@ all_paths = function (T, nozero = FALSE) {
       increments = rep(-1, T)
       increments[choice] = 1
       if (nozero) {
-        Omega[[index]] = cumsum(increments)
+        Omega[[id]] = cumsum(increments)
       } else {
-        Omega[[index]] = c(0, cumsum(increments))
+        Omega[[id]] = c(0, cumsum(increments))
       }
-      index = index + 1
+      id = id + 1
     }
   }
   return(Omega)

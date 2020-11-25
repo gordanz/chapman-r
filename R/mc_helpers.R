@@ -21,20 +21,20 @@ nedges = function(m) {
   nrow(m$edges)
 }
 
-check_index = function(m, index) {
-  if (index < 1 | (index > length(m)))
-    stop(paste(index, "is not a valid index."))
+check_id = function(m, id) {
+  if (id < 1 | (id > length(m)))
+    stop(paste(id, "is not a valid id."))
 }
 
 
-index_of <- function(m, x) {
+id_of <- function(m, x) {
   if (class(x) == "integer" | class(x) == "numeric") {
-    check_index(m,x)
+    check_id(m,x)
     return(x)
   } else {
-    index = match(x, m$states$label, nomatch = 0)
-    if (index)
-      return(index)
+    id = match(x, m$states$label, nomatch = 0)
+    if (id)
+      return(id)
     else
       stop(paste("No label", x))
   }
@@ -44,7 +44,7 @@ label_of <- function(m, x) {
   if (class(x)!="integer" & class(x)!="numeric") {
     return(x)
   } else {
-    check_index(m,x)
+    check_id(m,x)
     return(m$states$label[x])
   }
 }
@@ -52,8 +52,8 @@ label_of <- function(m, x) {
 
 
 edge_of = function(m, from, to) {
-  from = index_of(m,from)
-  to = index_of(m,to)
+  from = id_of(m,from)
+  to = id_of(m,to)
 
   edge_indices = which((m$edges$from == from &
                           m$edges$to == to))
@@ -68,7 +68,7 @@ edge_of = function(m, from, to) {
 
 # shortcuts
 l = label_of
-i = index_of
+i = id_of
 e = edge_of
 
 
@@ -112,7 +112,7 @@ add_state_by_label <- function(m,...) {
     shape = default$state.shape,
     x = default$state.x,
     y = default$state.y,
-    index = length(m)+1
+    id = length(m)+1
   )
   args = utils::modifyList(defaults, list(...))
   m$states = do.call(tibble::add_row, c(list(m$states),args))
@@ -123,8 +123,8 @@ add_state_by_label <- function(m,...) {
 #' Adds an edge to a markov_chain
 #'
 #' @param m a markov_chain object
-#' @param from a state. If string then interpreted as a label, otherwise index.
-#' @param to a state. If string then interpreted as a label, otherwise index.
+#' @param from a state. If string then interpreted as a label, otherwise id.
+#' @param to a state. If string then interpreted as a label, otherwise id.
 #' @param prob the probability (defaults fo 1)
 #' @param ... Extra arguments like color, loop_angle, curve, etc.
 #'
@@ -136,8 +136,8 @@ add_edge <- function(m, from, to, prob=1, ...) {
     loop_angle = default$edge.loop_angle,
     label = default$edge.label.function(prob),
     curve = 0,
-    from = index_of(m,from),
-    to = index_of(m,to),
+    from = id_of(m,from),
+    to = id_of(m,to),
     prob = prob
   )
   args = utils::modifyList(defaults, list(...))
@@ -150,7 +150,7 @@ add_edge <- function(m, from, to, prob=1, ...) {
 #' Sets properties of a state
 #'
 #' @param m a markov_chain object
-#' @param x if integer, state index, otherwise state label
+#' @param x if integer, state id, otherwise state label
 #' @param ... named properties to be set
 #'
 #' @return a markov_chain object
@@ -160,7 +160,7 @@ set_state = function(m, x, ...) {
   if (!all(names(properties) %in% names(m$states)))
     stop("Trying to set a non-existing property.")
   for (s in x) {
-    m$states[index_of(m,s), names(properties)] = properties
+    m$states[id_of(m,s), names(properties)] = properties
   }
   return(m)
 }
@@ -168,15 +168,15 @@ set_state = function(m, x, ...) {
 #' Sets edge properties
 #'
 #' @param m a markov_chain object
-#' @param from if integer index, otherwise state label
-#' @param to if integer index, otherwise state label
+#' @param from if integer id, otherwise state label
+#' @param to if integer id, otherwise state label
 #' @param ... a list of named properties to be set
 #'
 #' @return markov_chain
 #' @export
 set_edge= function(m, from, to, ...) {
-  from = index_of(m,from)
-  to = index_of(m,to)
+  from = id_of(m,from)
+  to = id_of(m,to)
   properties <- list(...)
   if (!all(names(properties) %in% names(m$edges)))
     stop("Trying to set a non-existing property.")

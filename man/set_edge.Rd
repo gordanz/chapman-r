@@ -9,9 +9,9 @@ set_edge(m, from, to, ...)
 \arguments{
 \item{m}{a markov_chain object}
 
-\item{from}{if integer index, otherwise state label}
+\item{from}{if integer id, otherwise state label}
 
-\item{to}{if integer index, otherwise state label}
+\item{to}{if integer id, otherwise state label}
 
 \item{...}{a list of named properties to be set}
 }

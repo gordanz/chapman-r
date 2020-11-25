@@ -9,9 +9,9 @@ add_edge(m, from, to, prob = 1, ...)
 \arguments{
 \item{m}{a markov_chain object}
 
-\item{from}{a state. If string then interpreted as a label, otherwise index.}
+\item{from}{a state. If string then interpreted as a label, otherwise id.}
 
-\item{to}{a state. If string then interpreted as a label, otherwise index.}
+\item{to}{a state. If string then interpreted as a label, otherwise id.}
 
 \item{prob}{the probability (defaults fo 1)}
 

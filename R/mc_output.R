@@ -208,4 +208,46 @@ plot.markov_chain <- function(x, ... ) {
   do.call(igraph::plot.igraph, args=arg)
 }
 
+#' Plot method for a markov_chain object
+#' using visNetwork library
+#'
+#' @param x the markov_chain object to be plotted
+#' @param ... additional graphics parameters
+#'
+#' @export
+plotvis <- function(m, ... ) {
+  from_function_call = list(...)
+  from_graphics_parameters = m$graphics_parameters
+
+  if (any(is.na(m$layout))) {
+    m = m %>% set_auto_layout
+  }
+  from_graphics_parameters$layout = m$layout
+  # from_here  =
+  #   list( edge.curved = m$edges$curve,
+  #         vertex.color = m$states$color,
+  #         vertex.label = m$states$label,
+  #         vertex.shape = m$states$shape,
+  #         edge.loop.angle = m$edges$loop_angle,
+  #         vertex.size = default$vertex.size,
+  #         vertex.label.cex = default$vertex.label.cex,
+  #         edge.arrow.size = default$edge.arrow.size,
+  #         edge.color = m$edges$color,
+  #         rescale = FALSE,
+  #         add.vertex.names = FALSE
+  #   )
+
+  g = igraph::graph_from_data_frame(m$edges,
+                                    directed = TRUE,
+                                    vertices = m$states)
+
+  arg = list(x=g) %>%
+    utils::modifyList(from_here) %>%
+    utils::modifyList(from_here_lim) %>%
+    utils::modifyList(from_graphics_parameters) %>%
+    utils::modifyList(from_function_call)
+
+
+  do.call(igraph::plot.igraph, args=arg)
+}
 

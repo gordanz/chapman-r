@@ -9,7 +9,7 @@ set_state(m, x, ...)
 \arguments{
 \item{m}{a markov_chain object}
 
-\item{x}{if integer, state index, otherwise state label}
+\item{x}{if integer, state id, otherwise state label}
 
 \item{...}{named properties to be set}
 }
