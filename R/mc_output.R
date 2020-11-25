@@ -222,6 +222,10 @@ plotvis <- function(m, ... ) {
   if (any(is.na(m$layout))) {
     m = m %>% set_auto_layout
   }
+  nodes = m$states
+  edges = m$edges
+  edges$arrows = "to"
+
   from_graphics_parameters$layout = m$layout
   # from_here  =
   #   list( edge.curved = m$edges$curve,
@@ -237,17 +241,9 @@ plotvis <- function(m, ... ) {
   #         add.vertex.names = FALSE
   #   )
 
-  g = igraph::graph_from_data_frame(m$edges,
-                                    directed = TRUE,
-                                    vertices = m$states)
-
-  arg = list(x=g) %>%
-    utils::modifyList(from_here) %>%
-    utils::modifyList(from_here_lim) %>%
-    utils::modifyList(from_graphics_parameters) %>%
-    utils::modifyList(from_function_call)
-
-
-  do.call(igraph::plot.igraph, args=arg)
-}
+  visNetwork(nodes, edges) %>%
+    visPhysics(solver = "forceAtlas2Based",
+               forceAtlas2Based = list(
+                 gravitationalConstant = -5))
+    }
 
