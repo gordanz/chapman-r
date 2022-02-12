@@ -55,12 +55,12 @@ classify = function(m) {
 
   if (! "class" %in% colnames(m$states)){
     m$states = m$states %>%
-      add_column(class = class_of)
+      tibble::add_column(class = class_of)
   }
 
   if (! "recurrent" %in% colnames(m$states)){
     m$states = m$states %>%
-      add_column(recurrent = TRUE)
+      tibble::add_column(recurrent = TRUE)
   }
 
   class_rec = rep(TRUE, cl)

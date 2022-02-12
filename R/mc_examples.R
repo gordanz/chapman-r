@@ -554,7 +554,7 @@ pattern = function (pattern_string, p=1/2) {
   }
   pat = stov(pattern_string)
   if (any( ! pat %in% c("H","T"))) {
-    stop("Nees a string of Hs and Ts only")
+    stop("Needs a string of Hs and Ts only")
   }
   n = length(pat)
   m = markov_chain() %>%
