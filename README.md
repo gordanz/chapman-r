@@ -7,9 +7,7 @@
 
 <!-- badges: end -->
 
-The goal of chapman is to … nothing yet.
-
-Don’t believe anything written below\!
+This is a relative, written in R, of the Python package *chapman* (available at [gordanz/chapman-py](https://github.com/gordanz/chapman)) for creation, visualization and manipulation of Markov chains. 
 
 ## Installation
 
@@ -24,12 +22,10 @@ And the development version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("gordanz/chapman")
+devtools::install_github("gordanz/chapman-r")
 ```
 
 ## Example
-
-This is a basic example which shows you how to solve a common problem:
 
 ``` r
 library(chapman)
