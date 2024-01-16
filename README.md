@@ -7,7 +7,7 @@
 
 <!-- badges: end -->
 
-This is a relative, written in R, of the Python package *chapman* (available at [gordanz/chapman-py](https://github.com/gordanz/chapman)) for creation, visualization and manipulation of Markov chains. 
+*chapman-r* is an R package for creation, visualization and manipulation of Markov chains. 
 
 ## Installation
 
